@@ -12,17 +12,30 @@ archivo —estilos, Chart.js, render— no se toca nunca.
 > (`pdftoppm -png -r 110 -f N -l N informe.pdf pagN`) y **léela como
 > imagen**. Nunca transcribas desde el texto plano.
 
-| Pág. | Título en el PDF | Alimenta |
-|---|---|---|
-| 1 | INFORME TICKETS ABIERTOS | `abiertosKpi`, `abiertosFinMes`, `abiertosArea`, `antiguedad`, `abiertosCliente` |
-| 2 | INFORME TICKETS ABIERTOS Y CERRADOS | `tarjetasAnio`, `flujo`, `areaNov` |
-| 3 | INFORME TIEMPOS DE SERVICIO | `sla` (todo el bloque) |
-| 4 | INFORME GENERAL TICKETS REABIERTOS | `reabiertos` |
-| 5 | CLIENTES CON MÁS INGRESO Y CIERRE TICKETS | `clientes` |
-| 6 | TICKETS POR ÁREAS 2026 | `areas`, `areaOct` (tabla izquierda = mes cerrado; derecha = mes en curso) |
-| 7 | INFORMES TICKETS CLIENTES 2026 | `informes` |
-| 8 | MANTENIMIENTOS 2026 | `mantenimientos`, `efReal`, `efTot` |
-| 9 | CUMPLIMIENTO ANS POR TÉCNICO | `ansOct` |
+> **El número de página NO es estable.** El export del 10-nov-2026 trae diez
+> páginas y abre con «TICKETS TOTAL ABIERTOS POR NIVEL»; el del 18-nov-2026
+> trae nueve y esa página no existe. **Localiza cada sección por su título,
+> nunca por su número de página.** Si un título no aparece en el export de
+> esta semana, deja publicados los valores anteriores de esa sección y dilo
+> en la notificación.
+
+| Título en el PDF | Alimenta |
+|---|---|
+| TICKETS TOTAL ABIERTOS POR NIVEL · CONSOLIDADO DIARIOS | `semana.dias`, `abiertosArea` |
+| INFORME TICKETS ABIERTOS | `abiertosKpi`, `abiertosFinMes`, `abiertosArea`, `antiguedad`, `abiertosCliente` |
+| INFORME TICKETS ABIERTOS Y CERRADOS | `tarjetasAnio`, `flujo`, `areaNov` |
+| INFORME TIEMPOS DE SERVICIO | `sla` (todo el bloque) |
+| INFORME GENERAL TICKETS REABIERTOS | `reabiertos` |
+| CLIENTES CON MÁS INGRESO Y CIERRE TICKETS | `clientes` |
+| TICKETS POR ÁREAS 2026 | `areas`, `areaOct` (tabla izquierda = mes cerrado; derecha = mes en curso) |
+| INFORMES TICKETS CLIENTES 2026 | `informes` |
+| MANTENIMIENTOS 2026 | `mantenimientos`, `efReal`, `efTot` |
+| CUMPLIMIENTO ANS POR TÉCNICO | `ansOct` |
+
+Las dos primeras filas son alternativas: según el export, los tickets
+abiertos vienen en una página o en la otra. `semana.dias` (el consolidado
+diario del mes) solo existe en la primera; si el export no la trae, ese
+campo no se actualiza.
 
 ## Detalle por sección
 

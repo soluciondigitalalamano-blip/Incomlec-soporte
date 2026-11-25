@@ -13,10 +13,14 @@ una hora que quede en el futuro.
 ## Paso 0 · Salidas tempranas
 
 Busca en Gmail un correo **del dominio `incomelec.com`**, con **«Informe de
-soporte» en el asunto** y un **PDF adjunto** llamado
-`<DDMMAAAA>_INFORME_SOPORTE.pdf`.
+soporte» en el asunto** y un **PDF adjunto**.
 
 Consulta sugerida: `from:incomelec.com subject:(informe soporte) has:attachment newer_than:10d`
+
+El adjunto se llama `<DDMMAAAA> INFORME SOPORTE.pdf`. **Los separadores
+varían**: pueden ser espacios o guiones bajos. No descartes un PDF por eso;
+lo que importa son los ocho dígitos iniciales, que son la fecha del corte en
+formato DDMMAAAA.
 
 - **No llegó** → termina en silencio. No avises.
 - **Llegó, pero su corte ya está publicado** en `semana.corte` de
@@ -56,6 +60,11 @@ Nunca publiques como dato nuevo una cifra repetida de la semana anterior.
 
 Sigue `MAPA_PDF_A_DATA.md`, que dice qué página alimenta cada sección. No
 inventes correspondencias que no estén ahí.
+
+**Ubica cada sección por el título de la página, nunca por su número.** El
+número de páginas cambia de un export a otro: el del 10-nov trajo diez y el
+del 18-nov, nueve. Si un título no aparece esta semana, deja publicados los
+valores anteriores de esa sección y dilo en la notificación.
 
 Edita **solo** el bloque `const DATA = { … }` de
 `SOPORTE SEMANAL/index.html`, incluidos `semana.label`, `semana.corte` y
