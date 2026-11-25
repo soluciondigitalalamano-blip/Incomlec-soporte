@@ -56,6 +56,33 @@ Si alguna página no corresponde al corte:
 
 Nunca publiques como dato nuevo una cifra repetida de la semana anterior.
 
+## ⛔ Bloqueo abierto · la plantilla no está parametrizada
+
+**Hasta que esto se resuelva, no se puede publicar una semana nueva.**
+
+El comentario del propio `index.html` dice «Para otra semana: actualiza solo
+este bloque». **No es cierto.** Fuera del bloque `DATA`, el código de
+presentación tiene la fecha del corte escrita a mano en unas 39 cadenas:
+`corte 10 nov`, `noviembre (al 10)`, `al 10 nov`, `Corte 10 nov 2026`,
+`'4 – 10 nov'`, y la etiqueta del eje `j===NOV?'10 nov':m`.
+
+Actualizar solo `DATA` dejaría el encabezado diciendo una fecha y el resto
+de la página otra, en decenas de sitios.
+
+Hay además texto fijo que contradice los datos nuevos:
+
+- Cuatro lugares afirman «El informe no registra reaperturas» y «Bajo nivel
+  de reaperturas». El corte del 18-nov trae 4 reaperturas (13,3 %).
+- Una nota de mantenimientos trae escrito a mano `36,4 % al corte del 10
+  nov; faltan 14 del mes`, con cifras del corte anterior.
+- `reabiertos.tecnicos` y `reabiertos.tickets` existen en `DATA` pero la
+  presentación no los usa: siempre imprime el caso de cero.
+
+Qué hace falta: derivar esas cadenas de `DATA.semana` y hacer que los
+textos de reaperturas y mantenimientos dependan de los valores, no de
+constantes. Mientras tanto, el agente debe **detenerse en este paso y
+avisar**, no publicar.
+
 ## Paso 3 · Transcribir
 
 Sigue `MAPA_PDF_A_DATA.md`, que dice qué página alimenta cada sección. No
