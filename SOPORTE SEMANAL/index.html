@@ -505,6 +505,8 @@ tfoot td{font-weight:800;border-bottom:0;border-top:2px solid var(--line)}
    ===================================================================== */
 const DATA = {
   semana:{label:'Semana 12 – 18 nov 2026',corte:'18 nov 2026',hora:'07:00',
+    // La página «INFORME TICKETS ABIERTOS» del export venía congelada: su corte es anterior.
+    corteAbiertos:'10 nov 2026',
     // Consolidado diario: el export del 18 nov NO trae la página «CONSOLIDADO DIARIOS»,
     // así que estos valores siguen siendo los del corte anterior (4 – 10 nov).
     dias:[
@@ -617,12 +619,14 @@ const CORTE_DIA=parseInt(CORTE,10);                              // 18
 const MES_AL=`${DATA.mesesLargos[NOV].replace(/\s*\(.*$/,'').toLowerCase()} (al ${CORTE_DIA})`;
 const MES_AL_C=MES_AL.charAt(0).toUpperCase()+MES_AL.slice(1);
 const RANGO=DATA.semana.label.replace(/^Semana\s+/,'').replace(/\s+\d{4}$/,'');
+const CORTE_AB=DATA.semana.corteAbiertos||CORTE;        // corte de los tickets abiertos
+const CORTE_AB_DM=CORTE_AB.replace(/\s+\d{4}$/,'');
 /* Encabezado y pie: se rellenan desde DATA, no se escriben a mano */
 document.addEventListener('DOMContentLoaded',()=>{
   const g=id=>document.getElementById(id);
   if(g('sc-pill')) g('sc-pill').textContent=DATA.semana.label;
   if(g('sc-corte')) g('sc-corte').textContent=CORTE;
-  if(g('sc-detalle')) g('sc-detalle').textContent=`${DATA.abiertosKpi.total} abiertos · noviembre lleva ${DATA.flujo.ingresados[NOV]} ingresados y ${DATA.flujo.cerradosTotal[NOV]} cerrados`;
+  if(g('sc-detalle')) g('sc-detalle').textContent=`${DATA.abiertosKpi.total} abiertos al ${CORTE_AB_DM} · noviembre lleva ${DATA.flujo.ingresados[NOV]} ingresados y ${DATA.flujo.cerradosTotal[NOV]} cerrados`;
   if(g('pie-fuente')) g('pie-fuente').textContent=`Fuente: Informe de Soporte Incomelec (Power BI) · ${DATA.semana.label.toLowerCase()} (corte ${CORTE_DM} · ${DATA.semana.hora}). Octubre con cierre de mes completo; noviembre al corte.`;
 });
 F.cerradosAntiguos=F.cerradosTotal.map((t,i)=>t-F.cerradosNuevos[i]);
@@ -741,8 +745,8 @@ const GO={
   area(k){const A=DATA.areas[k],ab=DATA.abiertosArea[k]||[0,0],o=DATA.areaOct[k]||[0,0],n=DATA.areaNov[k]||[0,0,0,0];
     const sl=DATA.sla.area.find(r=>r[0]===k),ans=DATA.ansOct.areaCierre.find(r=>r[0]===k);
     const pill=ab[0]>=10?`<span class="pill p-bad">${ic('alert')} ${ab[0]} abiertos al corte</span>`:o[0]&&o[1]===0?`<span class="pill p-warn">${ic('alert')} Sin cierres en octubre</span>`:`<span class="pill p-neu">${ab[0]} abiertos al corte</span>`;
-    openInspector({kind:'Área · '+A.s,title:A.n,sub:`Cola de atención de soporte · corte ${CORTE_DM}`,pill,key:'area-'+k,
-      minis:[[`Abiertos al ${CORTE_DM}`,nf(ab[0]),ab[0]/AB*100],['Ingresados octubre',nf(o[0])],['Cerrados octubre',nf(o[1])],['Efectividad octubre',o[0]?pc(ef(o)):'Sin ingresos',ef(o)]],
+    openInspector({kind:'Área · '+A.s,title:A.n,sub:`Cola de atención de soporte · corte ${CORTE_AB_DM}`,pill,key:'area-'+k,
+      minis:[[`Abiertos al ${CORTE_AB_DM}`,nf(ab[0]),ab[0]/AB*100],['Ingresados octubre',nf(o[0])],['Cerrados octubre',nf(o[1])],['Efectividad octubre',o[0]?pc(ef(o)):'Sin ingresos',ef(o)]],
       sections:[
         {t:'Octubre y noviembre',h:tbl([['Mes'],['Ingresados',1],['Cerrados',1],['% efectividad',1],['Sin cerrar',1]],[{c:['Octubre',nf(o[0]),nf(o[1]),o[0]?pc(ef(o)):'—',nf(o[0]-o[1])]},{c:[`${MES_AL_C}`,nf(n[0]),nf(n[1]),n[0]?pc(ef(n)):'—',nf(n[0]-n[1])]}])},
         {t:'Ritmo y tiempos',h:kv([['Promedio de tickets ingresados por día (noviembre al 10)',nf(n[2])],['Promedio de atención (noviembre al 10)',atTxt(n)],['Participación en los ingresos de octubre',pc(o[0]/F.ingresados[OCT]*100)],['Promedio general ANS del año',sl?hf(sl[1]):'Sin dato'],['Promedio cuando cumple ANS',sl&&sl[2]!=null?hf(sl[2]):'Sin dato'],[`Cerrados dentro del ANS en ${MES_AL}`,ans?nf(ans[1]):'—']])},
@@ -756,14 +760,14 @@ const GO={
     openInspector({kind:'Mes · 2026',title:mesTxt(i)+' 2026',sub:i===NOV?`Ingresados, cierres y pendientes al corte del ${CORTE_DM}`:'Ingresados, cierres y pendientes',key:'mes-'+i,
       pill:`<span class="pill p-neu">Ratio de cierre ${pc(F.ratio[i])}</span>`,
       minis:[['Ingresados',nf(ing)],['Cerrados nuevos',nf(n),n/ing*100],['Cerrados antiguos',nf(a)],['Pendientes',nf(F.pendientes[i])]],
-      sections:[{t:'Detalle',h:kv([['Tickets ingresados',nf(ing)],['Cerrados nuevos',nf(n)],['Cerrados antiguos (de meses previos)',nf(a)],['Total cerrados',nf(F.cerradosTotal[i])],['Pendientes',nf(F.pendientes[i])],['% ratio (cerrados nuevos / ingresados)',pc(F.ratio[i])],['Promedio general ANS',hf(DATA.sla.general[i])],['Promedio a tiempo / fuera de tiempo',hf(DATA.sla.aTiempo[i])+' / '+hf(DATA.sla.fueraT[i])],[i===NOV?'Abiertos al corte (10 nov)':'Abiertos al cierre',nf(DATA.abiertosFinMes[i])]])},
+      sections:[{t:'Detalle',h:kv([['Tickets ingresados',nf(ing)],['Cerrados nuevos',nf(n)],['Cerrados antiguos (de meses previos)',nf(a)],['Total cerrados',nf(F.cerradosTotal[i])],['Pendientes',nf(F.pendientes[i])],['% ratio (cerrados nuevos / ingresados)',pc(F.ratio[i])],['Promedio general ANS',hf(DATA.sla.general[i])],['Promedio a tiempo / fuera de tiempo',hf(DATA.sla.aTiempo[i])+' / '+hf(DATA.sla.fueraT[i])],[i===NOV?`Abiertos al corte (${CORTE_AB_DM})`:'Abiertos al cierre',nf(DATA.abiertosFinMes[i])]])},
         {t:'Todos los meses',h:tbl([['Mes'],['Ingresados',1],['Cerr. nuevos',1],['Cerr. antiguos',1],['Pendientes',1],['Ratio',1]],DATA.meses.map((m,j)=>({c:[mesTxt(j),nf(F.ingresados[j]),nf(F.cerradosNuevos[j]),nf(F.cerradosAntiguos[j]),nf(F.pendientes[j]),pc(F.ratio[j])],_go:'mes',_arg:j})),['Total',nf(sum(F.ingresados)),nf(sum(F.cerradosNuevos)),nf(sum(F.cerradosAntiguos)),nf(sum(F.pendientes)),''])},
         {h:i===OCT||i===NOV?`<button class="chip sm" data-go="verArea" data-arg="${i===OCT?'oct':'nov'}">Ver desglose por área</button>`:''}]});},
   verArea(p){closeInspector();STATE.areaPer=p;STATE.rendered.flujo=false;go('flujo');},
-  finMes(i){i=+i;const v=DATA.abiertosFinMes;openInspector({kind:'Backlog',title:i===NOV?`Corte ${CORTE}`:mesTxt(i)+' 2026',sub:'Tickets que quedaron abiertos',key:'fin-'+i,
+  finMes(i){i=+i;const v=DATA.abiertosFinMes;openInspector({kind:'Backlog',title:i===NOV?`Corte ${CORTE_AB}`:mesTxt(i)+' 2026',sub:'Tickets que quedaron abiertos',key:'fin-'+i,
     minis:[['Abiertos',nf(v[i])],['Cambio vs mes anterior',i?sg(v[i]-v[i-1]):'—']],
-    sections:[{t:'Todos los meses',h:tbl([['Mes'],['Abiertos',1]],v.map((x,j)=>({c:[j===NOV?`Corte ${CORTE_DM}`:mesTxt(j),nf(x)],_go:'finMes',_arg:j})))}]});},
-  antig(i){i=+i;const r=DATA.antiguedad[i];openInspector({kind:'Antigüedad del backlog',title:'Creados en '+r[0],sub:`Abiertos al ${CORTE_DM} según mes de creación`,key:'ant-'+i,
+    sections:[{t:'Todos los meses',h:tbl([['Mes'],['Abiertos',1]],v.map((x,j)=>({c:[j===NOV?`Corte ${CORTE_AB_DM}`:mesTxt(j),nf(x)],_go:'finMes',_arg:j})))}]});},
+  antig(i){i=+i;const r=DATA.antiguedad[i];openInspector({kind:'Antigüedad del backlog',title:'Creados en '+r[0],sub:`Abiertos al ${CORTE_AB_DM} según mes de creación`,key:'ant-'+i,
     minis:[['Tickets abiertos',nf(r[1])],['Del total abierto',pc(r[1]/AB*100),r[1]/AB*100]],
     sections:[{t:'Todos los meses de creación',h:tbl([['Mes de creación'],['Abiertos',1],['%',1]],DATA.antiguedad.map((x,j)=>({c:[x[0],nf(x[1]),pc(x[1]/AB*100)],_go:'antig',_arg:j})),['Total',nf(AB),'100,0 %'])}]});},
   abCli(i){i=+i;const r=DATA.abiertosCliente[i];const same=DATA.abiertosCliente.map((x,j)=>[x,j]).filter(([x])=>x[2]===r[2]);
@@ -787,7 +791,7 @@ const GO={
     openInspector({kind:`Cliente · noviembre 2026 (al ${CORTE_DIA})`,title:c.n,sub:`Top 10 de clientes por tickets ingresados en ${MES_AL}`,key:'cli-'+k,
       pill:c.ing-c.cer>=1?`<span class="pill p-warn">${c.ing-c.cer} sin cerrar en noviembre</span>`:`<span class="pill p-good">${pc(c.cer/c.ing*100)} cerrados</span>`,
       minis:[['Ingresados',nf(c.ing)],['Cerrados',nf(c.cer),c.cer/c.ing*100],['Movimientos de entrada',nf(c.ent)],['Tickets por 10.000 entradas',per?nf(per,1):'Sin movimientos']],
-      sections:[{t:`Tickets abiertos de este cliente (corte ${CORTE_DM})`,h:ab.length?tbl([['Año'],['Mes'],['Abiertos',1],['Días',1]],ab.map(([r,i])=>({c:[r[0],r[1],nf(r[3]),nf(r[5])],_go:'abCli',_arg:i}))):'<p class="note">No aparece en la tabla de tickets abiertos por cliente.</p>'},
+      sections:[{t:`Tickets abiertos de este cliente (corte ${CORTE_AB_DM})`,h:ab.length?tbl([['Año'],['Mes'],['Abiertos',1],['Días',1]],ab.map(([r,i])=>({c:[r[0],r[1],nf(r[3]),nf(r[5])],_go:'abCli',_arg:i}))):'<p class="note">No aparece en la tabla de tickets abiertos por cliente.</p>'},
         {t:'Tickets reabiertos',h:(()=>{const rr=DATA.reabiertos.tickets.filter(t=>c.match.some(m=>t[0].toLowerCase().includes(m.toLowerCase())));return rr.length?tbl([['Ticket'],['Reaperturas',1],['Técnico']],rr.map(t=>({c:[t[3],nf(t[1]),esc(t[2])]}))):'<p class="note">Este cliente no registra reaperturas en el corte.</p>';})()}]});},
   informe(i){i=+i;const r=DATA.informes.filas[i],I=DATA.informes;openInspector({kind:'Informes a clientes · '+r[0],title:'Nivel '+r[0],sub:'Informes de tickets a clientes · noviembre',key:'inf-'+i,
     pill:`<span class="pill ${r[6]<50?'p-bad':r[6]>=100?'p-good':'p-neu'}">${pc(r[6])} del mes</span>`,
@@ -828,11 +832,11 @@ const KPIS={
     minis:[['Octubre · promedio general',hf(S.general[OCT])],['Año · promedio general',hf(S.promedio)],['Cumplen ANS en el año',nf(S.cumple),S.cumplePct],['Prom. a tiempo / fuera',hf(S.promATiempo)+' / '+hf(S.promFuera)]],
     sections:[{t:'Promedio por mes (h)',h:tbl([['Mes'],['General',1],['A tiempo',1],['Fuera',1],['Nuevos a tiempo',1],['Nuevos fuera',1]],DATA.meses.map((m,i)=>({c:[mesTxt(i),nf(S.general[i],1),nf(S.aTiempo[i],1),nf(S.fueraT[i],1),nf(S.nuevosATiempo[i],1),nf(S.nuevosFuera[i],1)],_go:'mes',_arg:i})))},
       {t:'Por nivel de servicio',h:tbl([['Nivel'],['Cerrados',1],['A tiempo',1],['Fuera',1],['% ANS',1]],S.prioridad.map((x,j)=>({c:[x[0],nf(x[1]),nf(x[2]),nf(x[3]),pc(x[5])],_go:'prioridad',_arg:j})),['Total',nf(S.cerrados),nf(S.cumple),nf(S.fuera),pc(S.cumplePct)])}]};},
-  mas7:()=>{const K=DATA.abiertosKpi;return{kind:'KPI · Antigüedad',title:`${K.mas7dias} tickets con más de 7 días`,sub:`${pc(K.mas7dias/AB*100)} del backlog al ${CORTE_DM}`,key:'kpi-mas7',
+  mas7:()=>{const K=DATA.abiertosKpi;return{kind:'KPI · Antigüedad',title:`${K.mas7dias} tickets con más de 7 días`,sub:`${pc(K.mas7dias/AB*100)} del backlog al ${CORTE_AB_DM}`,key:'kpi-mas7',
     minis:[['Más de 7 días',nf(K.mas7dias),K.mas7dias/AB*100],['Antigüedad promedio',df(K.antiguedadDias)],['Creados antes de ago 2026',nf(sum(DATA.antiguedad.slice(0,6).map(r=>r[1])))]],
     sections:[{t:'Abiertos por mes de creación',h:tbl([['Mes de creación'],['Abiertos',1]],DATA.antiguedad.map((x,j)=>({c:[x[0],nf(x[1])],_go:'antig',_arg:j})),['Total',nf(AB)])},
       {t:'Tickets abiertos por cliente',h:tbl([['Cliente'],['Mes'],['Tickets',1],['Días',1]],DATA.abiertosCliente.map((r,i)=>({c:[esc(r[2]),r[1]+' '+r[0],nf(r[3]),nf(r[5])],_go:'abCli',_arg:i})),['Total','',nf(AB),nf(K.antiguedadDias)])}]};},
-  clientesAb:()=>{const K=DATA.abiertosKpi;return{kind:'KPI · Clientes',title:`${K.clientes} clientes con tickets abiertos`,sub:`100 % del total · corte ${CORTE_DM}`,key:'kpi-cli',
+  clientesAb:()=>{const K=DATA.abiertosKpi;return{kind:'KPI · Clientes',title:`${K.clientes} clientes con tickets abiertos`,sub:`100 % del total · corte ${CORTE_AB_DM}`,key:'kpi-cli',
     sections:[{t:'Tickets abiertos por cliente',h:tbl([['Año'],['Mes'],['Cliente'],['Tickets',1],['% del mes',1],['Días',1],['Horas',1]],DATA.abiertosCliente.map((r,i)=>({c:[r[0],r[1],esc(r[2]),nf(r[3]),r[4],nf(r[5]),nf(r[6],1)],_go:'abCli',_arg:i})),['Total','','',nf(AB),'100 %',nf(K.antiguedadDias),nf(K.antiguedadHoras,1)])}]};},
   reab:()=>{const R=DATA.reabiertos;return{kind:'KPI · Reaperturas',title:`${R.total} tickets reabiertos`,sub:`${R.cerradosSitio} tickets cerrados por técnicos en sitio`,key:'kpi-reab',pill:`<span class="pill ${R.total===0?'p-good':R.pct>=10?'p-warn':'p-neu'}">${R.total===0?'Sin reaperturas':`${pc(R.pct)} de los cierres en sitio`}</span>`,
     minis:[['Cerrados del año',nf(R.cerradosAnio)],['Cerrados por técnicos en sitio',nf(R.cerradosSitio)],['Tickets reabiertos',nf(R.total)],['Promedio de reaperturas',nf(R.promedio)]],
@@ -900,7 +904,7 @@ function weekLine(id,h){const acc=cssv('--accent'),neu=cssv('--series-neutral');
 /* ---------- RESUMEN ---------- */
 function renderResumen(){const el=$('#v-resumen'),M=DATA.mantenimientos,I=DATA.informes;
   el.innerHTML=`<div class="grid">
-    ${kpiCard('abiertos','c4 hero','inbox','Tickets abiertos al corte',AB,0,'',`<span class="pill">${NET>0?'↑':'↓'} ${Math.abs(NET)} en la semana (${REF} → ${LAST})</span> ${DATA.abiertosKpi.clientes} clientes · corte ${CORTE_DM}`)}
+    ${kpiCard('abiertos','c4 hero','inbox','Tickets abiertos al corte',AB,0,'',`<span class="pill">${NET>0?'↑':'↓'} ${Math.abs(NET)} en la semana (${REF} → ${LAST})</span> ${DATA.abiertosKpi.clientes} clientes · corte ${CORTE_AB_DM}`)}
     ${kpiCard('pico','c4','alert','Pico de la semana',PEAK,0,'',`${WK[PEAKI].l} · al corte quedó en ${LAST}`)}
     ${kpiCard('cerrOct','c4','check','Cerrados en octubre',OCTC,0,'',`<span class="pill p-good">${OCTC-OCTI} más de los que entraron</span> ${OCTN} nuevos + ${OCTA} antiguos`)}
     ${kpiCard('ingOct','c4','flow','Ingresados en octubre',OCTI,0,'',cmp(OCTI,F.ingresados[SEP],true,'septiembre')+' 262 en sistemas nivel 1')}
@@ -969,20 +973,20 @@ function renderFlujoArea(){const oct=STATE.areaPer!=='nov',src=oct?DATA.areaOct:
 /* ---------- BACKLOG ---------- */
 function renderBacklog(){const el=$('#v-backlog'),K=DATA.abiertosKpi;
   el.innerHTML=`<div class="grid">
-    ${kpiCard('abiertos','c3 hero','inbox','Tickets abiertos',AB,0,'',`${NET>0?'↑':'↓'} ${Math.abs(NET)} en la semana · corte ${CORTE_DM}`)}
+    ${kpiCard('abiertos','c3 hero','inbox','Tickets abiertos',AB,0,'',`${NET>0?'↑':'↓'} ${Math.abs(NET)} en la semana · corte ${CORTE_AB_DM}`)}
     ${kpiCard('clientesAb','c3','users','Clientes con tickets abiertos',K.clientes,0,'','100 % del total')}
     ${kpiCard('mas7','c3','timer','Antigüedad promedio',K.antiguedadDias,0,'',`Promedio abierto · ${nf(K.antiguedadHoras,1)} h`,'días')}
     ${kpiCard('mas7','c3','alert','Con más de 7 días',K.mas7dias,0,'',`<span class="pill p-bad">${pc(K.mas7dias/AB*100)} del backlog</span>`)}
     ${card('c8',ctitle(`En la semana el backlog pasó de ${REF} a ${LAST}`,'Corte anterior y consolidado diario de noviembre · clic en un punto')+weekBoxes()+`<div class="chart" style="height:300px;margin-top:14px"><canvas id="chDiario" role="img" aria-label="Línea de abiertos en la semana"></canvas></div>`)}
-    ${card('c4',ctitle(`Noviembre va en ${DATA.abiertosFinMes[NOV]}, el nivel más alto del año`,`Abiertos al cierre de cada mes · noviembre = corte ${CORTE_DM}`)+`<div class="chart" style="height:420px"><canvas id="chFinMes" role="img" aria-label="Línea de abiertos al cierre de cada mes"></canvas></div>`)}
-    ${card('c6',ctitle(`${ESCN} de los ${AB} abiertos esperan a un tercero`,`Abiertos por área al ${CORTE_DM} · rayado: creados en 2025 · clic para el área`)+`<div class="legend"><span><i style="background:var(--accent)"></i>Escalamiento externo</span><span><i style="background:var(--series-neutral)"></i>Área interna</span><span><i class="sw-stripe"></i>Creados en 2025</span></div><div class="chart" style="height:360px"><canvas id="chBkArea" role="img" aria-label="Barras de abiertos por área"></canvas></div>`)}
+    ${card('c4',ctitle(`Noviembre va en ${DATA.abiertosFinMes[NOV]}, el nivel más alto del año`,`Abiertos al cierre de cada mes · noviembre = corte ${CORTE_AB_DM}`)+`<div class="chart" style="height:420px"><canvas id="chFinMes" role="img" aria-label="Línea de abiertos al cierre de cada mes"></canvas></div>`)}
+    ${card('c6',ctitle(`${ESCN} de los ${AB} abiertos esperan a un tercero`,`Abiertos por área al ${CORTE_AB_DM} · rayado: creados en 2025 · clic para el área`)+`<div class="legend"><span><i style="background:var(--accent)"></i>Escalamiento externo</span><span><i style="background:var(--series-neutral)"></i>Área interna</span><span><i class="sw-stripe"></i>Creados en 2025</span></div><div class="chart" style="height:360px"><canvas id="chBkArea" role="img" aria-label="Barras de abiertos por área"></canvas></div>`)}
     ${card('c6',ctitle(`${DATA.antiguedad.find(r=>r[0]==='nov 2026')[1]} de los ${AB} abiertos se crearon en noviembre`,'Abiertos al corte según el mes de creación · clic para el detalle')+`<div class="chart" style="height:360px"><canvas id="chAntig" role="img" aria-label="Barras de abiertos por mes de creación"></canvas></div>`)}
     <article class="card c12" id="bkClientes"></article>
   </div>`;
   wireKpis(el);$$('[data-dia]',el).forEach(b=>b.addEventListener('click',()=>GO.dia(+b.dataset.dia)));
   weekLine('chDiario',300);
   const neu=cssv('--series-neutral'),acc=cssv('--accent');
-  mkChart('chFinMes',{type:'line',data:{labels:DATA.meses.map((m,j)=>j===NOV?CORTE_DM:m),datasets:[{label:'Abiertos',data:DATA.abiertosFinMes,borderColor:acc,backgroundColor:acc,pointRadius:DATA.abiertosFinMes.map((_,i)=>i>=OCT?7:4),segment:{borderDash:c=>c.p1DataIndex===NOV?[5,4]:undefined}}]},
+  mkChart('chFinMes',{type:'line',data:{labels:DATA.meses.map((m,j)=>j===NOV?CORTE_AB_DM:m),datasets:[{label:'Abiertos',data:DATA.abiertosFinMes,borderColor:acc,backgroundColor:acc,pointRadius:DATA.abiertosFinMes.map((_,i)=>i>=OCT?7:4),segment:{borderDash:c=>c.p1DataIndex===NOV?[5,4]:undefined}}]},
     options:baseOpts({interaction:{mode:'index',intersect:false},scales:{y:{beginAtZero:false,min:70}},plugins:{valueLabels:{on:true,fmt:(v,i)=>[0,6,7,8,9,10].includes(i)?nf(v):''}},onClick:onPick(i=>GO.finMes(i))})});
   const ent=Object.entries(DATA.abiertosArea).sort((a,b)=>b[1][0]-a[1][0]);
   mkChart('chBkArea',{type:'bar',data:{labels:ent.map(([k])=>DATA.areas[k].n),datasets:[
@@ -994,7 +998,7 @@ function renderBacklog(){const el=$('#v-backlog'),K=DATA.abiertosKpi;
   mkChart('chAntig',{type:'bar',data:{labels:DATA.antiguedad.map(r=>r[0]),datasets:[{label:'Abiertos',data:DATA.antiguedad.map(r=>r[1]),backgroundColor:DATA.antiguedad.map((r,i)=>i===ai?acc:neu),borderRadius:{topRight:5,bottomRight:5},borderSkipped:'start',maxBarThickness:20}]},
     options:baseOpts({indexAxis:'y',layout:{padding:{right:30}},scales:{x:{display:false},y:{grid:{display:false}}},plugins:{valueLabels:{on:true}},onClick:onPick(i=>GO.antig(i))})});
   const rows=DATA.abiertosCliente.map((r,i)=>({i,anio:r[0],mes:r[1],cli:r[2],n:r[3],pct:r[4],dias:r[5],horas:r[6]}));
-  dataTable($('#bkClientes'),{title:'Tickets abiertos por cliente',sub:`Corte ${CORTE_DM} · filas visibles en el informe · clic para el detalle`,
+  dataTable($('#bkClientes'),{title:'Tickets abiertos por cliente',sub:`Corte ${CORTE_AB_DM} · filas visibles en el informe · clic para el detalle`,
     cols:[{k:'anio',l:'Año',f:v=>v},{k:'mes',l:'Mes de creación'},{k:'cli',l:'Cliente'},{k:'n',l:'Tickets',n:1},{k:'pct',l:'% del mes',n:1},{k:'dias',l:'Antigüedad (días)',n:1,f:v=>nf(v)},{k:'horas',l:'Antigüedad (h)',n:1,f:v=>nf(v,1)}],
     rows,key:r=>'abc-'+r.i,onRow:r=>GO.abCli(r.i),sort:'dias',foot:{anio:'Total',n:nf(AB),pct:'100 %',dias:nf(K.antiguedadDias),horas:nf(K.antiguedadHoras,1)}});}
 
