@@ -68,6 +68,31 @@ vez de editarla.
 Lo mismo con los textos de reaperturas y de mantenimientos: dependen de
 `DATA.reabiertos` y `DATA.mantenimientos`, no de constantes.
 
+### Los dos cortes  ⚠️ revísalo cada semana
+
+El informe maneja **dos** fechas de corte, porque el export puede traer la
+página de tickets abiertos desfasada:
+
+| Campo | Qué rotula |
+|---|---|
+| `DATA.semana.corte` | todo lo demás: flujo, SLA, ANS, clientes, compromisos |
+| `DATA.semana.corteAbiertos` | backlog, tickets abiertos por área y por cliente, antigüedad |
+
+De ahí salen `CORTE` / `CORTE_DM` y `CORTE_AB` / `CORTE_AB_DM`.
+
+**Qué hacer cada semana**, según lo que diga la tarjeta *Max Fecha Datos*
+de la página «INFORME TICKETS ABIERTOS» (Paso 2):
+
+- Si corresponde al corte nuevo: transcribe esas secciones y pon
+  `corteAbiertos` **igual** a `corte`.
+- Si viene desfasada: no transcribas esas secciones y **deja
+  `corteAbiertos` con la fecha que indique la tarjeta**, no con la del
+  corte nuevo. Nunca lo dejes con el valor de la semana pasada por
+  descuido: si no lo tocas, la página seguirá afirmando una fecha falsa.
+
+Si el export deja de traer el desfase, `corteAbiertos` queda igual a
+`corte` y la distinción desaparece sola de la pantalla.
+
 ## Paso 3 · Transcribir
 
 Sigue `MAPA_PDF_A_DATA.md`, que dice qué página alimenta cada sección. No
@@ -107,7 +132,10 @@ de decir «Por actualizar».
 Commit y push a `main`. Cloudflare Pages despliega solo el proyecto
 `incomelec-soporte`.
 
-Espera al despliegue y comprueba que
+El despliegue de Cloudflare tarda entre uno y cuatro minutos desde el
+push. Espera y vuelve a consultar con un parámetro distinto en la URL
+(`?v=<algo>`) para no leer la copia en caché; no des por fallido el
+despliegue antes de cinco minutos. Comprueba que
 `https://incomelec-soporte.pages.dev/SOPORTE%20SEMANAL/` responda y muestre
 el corte nuevo. Esa es la URL a la que apunta el botón del correo. **Si no
 sirve todavía el contenido nuevo, no envíes el correo**: avisa que el

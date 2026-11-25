@@ -40,7 +40,10 @@ campo no se actualiza.
 ## Detalle por sección
 
 **`semana`** — `label` ('Semana D – D mes AAAA'), `corte` (fecha del nombre
-del archivo) y `hora` (la hora de la tarjeta *Max Fecha Datos* de la pág. 1).
+del archivo), `hora` y `corteAbiertos`. Este último es la fecha que rotula
+las secciones de tickets abiertos: ponlo igual a `corte` cuando la página
+de abiertos venga al día, y con la fecha de su tarjeta *Max Fecha Datos*
+cuando venga desfasada. Ver «Los dos cortes» en el runbook.
 
 **`abiertosKpi`** (pág. 1, tarjetas superiores) — `total` = Total Tickets
 Abiertos · `clientes` = Clientes con Tickets · `antiguedadDias` = Promedio
