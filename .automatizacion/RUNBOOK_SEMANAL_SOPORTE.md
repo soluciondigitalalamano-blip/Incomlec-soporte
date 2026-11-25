@@ -190,30 +190,47 @@ Solo si el correo salió. Base `LIDATO QUEST · Bitácora`
 (`collection://4204c6f8-c23f-8158-bae8-000bdfbb3f41`).
 
 Fila: `Registro` exactamente
-`INCOMELEC · Informe Semanal de Soporte · <YYYY-MM>`. Si no existe la fila
-del ciclo, **no la crees** y no inventes el `Total`: avisa que falta.
+`INCOMELEC · Informe Semanal de Soporte · <YYYY-MM>` (hoy es la N.º 47). Si
+no existe la fila del ciclo, **no la crees** y no inventes el `Total`:
+avisa que falta.
 
-**Candado por semana, no por día.** Seis corridas se reparten entre martes y
-miércoles. Mira el campo `Fecha`: si ya cae dentro de la semana en curso
-(lunes a domingo, hora de Bogotá), la entrega ya está marcada y **no tocas
-nada**. Comparar solo contra «hoy» dejaría pasar una segunda marca el
-miércoles.
+### El contador va por entrega, no por día de trabajo  ⚠️
 
-Si no está marcada:
+El `Total` del ciclo son los **viernes del mes**: el compromiso con el
+cliente es semanal, con fecha el viernes. Lo que se cuenta es la entrega,
+no el día en que el agente la publicó.
 
-- `Hecho` = el valor leído **más 1**, y solo +1. No lo recalcules contando
-  semanas del calendario: una semana sin entrega debe quedarse atrás.
-- `date:Fecha:start` = la fecha de hoy · `date:Fecha:is_datetime` = 0
+Por eso la pregunta no es «¿ya marqué hoy?» sino **«¿ya está contada la
+entrega que cubre este informe?»**:
+
+1. Calcula la **entrega que cubre el corte**: el viernes de la semana a la
+   que pertenece `DATA.semana.corte`. Un corte del miércoles 18-nov cubre
+   la entrega del viernes 20-nov.
+2. Mira el campo `Fecha` de la fila: guarda la **última entrega contada**,
+   no la última vez que corrió el agente.
+3. Si `Fecha` es igual o posterior a esa entrega, **ya está contada: no
+   toques nada**.
+4. Si es anterior o está vacía, marca: `Hecho` = el valor leído **más 1**,
+   `date:Fecha:start` = la **fecha de la entrega** (el viernes), no la de
+   hoy, y `date:Fecha:is_datetime` = 0.
+
+Comparar contra «hoy» o contra «la semana en curso» es incorrecto y hace
+doble conteo: publicar el lunes 24 un informe con corte del 18 cubre la
+entrega del viernes 20, no la del 27.
+
 - Si el nuevo `Hecho` iguala a `Total`: `Estado` = `Entregado a tiempo`.
   Si queda por debajo: `Estado` = `Parcial`. Si lo superaría: no escribas
   nada y avisa.
 - No cambies ninguna otra propiedad.
+- Si `Fecha` está vacía pero el campo `Detalle` dice que ya hay entregas
+  contadas, **no marques**: avisa, porque la fila no tiene todavía la
+  referencia que necesita el candado y marcar podría duplicar.
 
-Al terminar, relee la fila y di en una línea qué pasó: `contador 3 → 4` o
-`la semana ya estaba marcada, no se tocó`.
+Al terminar, relee la fila y di en una línea qué pasó: `contador 3 → 4,
+entrega del 27 nov` o `la entrega del 20 nov ya estaba contada, no se tocó`.
 
 Si Notion falla, el correo ya salió y eso no se deshace: avisa que falta
-marcar la semana y no reintentes en bucle.
+marcar la entrega y no reintentes en bucle.
 
 ## Si algo falla
 
