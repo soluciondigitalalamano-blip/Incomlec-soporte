@@ -1,12 +1,19 @@
+Su informe ha sido actualizado
+
 Estimado/a cliente,
 
-Le informamos que al corte del día {{FECHA_CORTE}} se ha actualizado el siguiente módulo:
+Le informamos que se ha actualizado el siguiente módulo:
 
-1. Informe Semanal de Soporte
+1. Informe Soporte Semanal
 
-Puede ingresar a su plataforma para revisar el detalle completo:
-https://portal-informes-incomelec.lidato.site/SOPORTE%20SEMANAL/
+Puede ingresar a su plataforma para revisar el detalle completo de la
+información actualizada:
+
+https://incomelec-soporte.pages.dev/
 
 Equipo Operaciones
 Lidato · Su solución digital a la mano
 operaciones@lidato.site
+
+© 2026 Lidato. Todos los derechos reservados.
+Este correo fue enviado porque tiene un cuadro de mando activo con nuestro equipo.

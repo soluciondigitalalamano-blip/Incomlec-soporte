@@ -83,11 +83,14 @@ de decir «Por actualizar».
 
 ## Paso 6 · Publicar
 
-Commit y push a `main`. Cloudflare Pages despliega solo.
+Commit y push a `main`. Cloudflare Pages despliega solo el proyecto
+`incomelec-soporte`.
 
-Verifica que la página publicada responda y muestre el corte nuevo. **Si la
-URL del cliente todavía no sirve el contenido nuevo, no envíes el correo**:
-avisa que el despliegue no llegó al dominio del cliente.
+Espera al despliegue y comprueba que
+`https://incomelec-soporte.pages.dev/SOPORTE%20SEMANAL/` responda y muestre
+el corte nuevo. Esa es la URL a la que apunta el botón del correo. **Si no
+sirve todavía el contenido nuevo, no envíes el correo**: avisa que el
+despliegue no llegó.
 
 ## Paso 7 · Correo al área de soporte
 
@@ -99,22 +102,23 @@ Con `mcp__Resend__send-email`:
 - `from`: `LIDATO <operaciones@lidato.site>`
 - `to`: `["diego.munoz@incomelec.com", "Linda.Silva@incomelec.com", "vanessa.patino@incomelec.com"]`
 - `subject`: `Actualización informe soporte`
-- `html`: el contenido de `correo-aviso.html` con `{{FECHA_CORTE}}` reemplazado
-- `text`: el de `correo-aviso.txt`, igual. Es obligatorio junto al html.
-- `attachments`: dos, en este orden. Primero `filename` `logo.png`, `url`
-  `https://raw.githubusercontent.com/soluciondigitalalamano-blip/mis-imagenes/refs/heads/main/logo-white.png`,
-  `contentId` `logolidato`. Segundo `filename` `usuario.png`, `url`
-  `https://raw.githubusercontent.com/soluciondigitalalamano-blip/mis-imagenes/refs/heads/main/user-icon-teal.png`,
-  `contentId` `iconousuario`. Esos `contentId` tienen que coincidir con los
-  `cid:` de la plantilla o los iconos salen rotos.
+- `html`: el contenido de `correo-aviso.html`, **tal cual, sin reemplazar nada**
+- `text`: el contenido de `correo-aviso.txt`, también tal cual. Es
+  obligatorio junto al html; no lo omitas.
+- `attachments`: **ninguno**. Esta plantilla trae el logo y el icono como
+  imágenes remotas (`src` a raw.githubusercontent.com), no como adjuntos
+  `cid:`. No le agregues adjuntos ni conviertas las imágenes a `cid:`.
 
-`{{FECHA_CORTE}}` es la fecha del corte en formato `18 de Noviembre`. No uses
-`date '+%B'`, que devuelve el mes en inglés. Antes de enviar comprueba que ni
-el html ni el texto conserven la cadena `FECHA_CORTE`.
+La plantilla no lleva fecha ni marcadores: no hay `{{FECHA_CORTE}}` que
+sustituir. No le agregues la fecha del corte al cuerpo ni al asunto.
+
+No toques el enlace del botón ni lo envuelvas en nada: Resend lo entrega
+intacto y el cliente entra con un solo clic.
 
 Después de enviar, con el `id` que devuelve llama a `mcp__Resend__get-email`
-y comprueba que el enlace del botón salió intacto, sin `google.com/url`, y
-que no quedó ningún `FECHA_CORTE`. Reporta el resultado en una línea.
+y comprueba en el HTML enviado que aparezca
+`href="https://incomelec-soporte.pages.dev/"` sin `google.com/url`. Reporta
+el resultado en una línea.
 
 Si Resend falla, avisa el error y **no reintentes por Gmail**.
 
