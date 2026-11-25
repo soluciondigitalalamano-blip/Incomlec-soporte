@@ -107,18 +107,31 @@ Edita **solo** el bloque `const DATA = { … }` de
 `SOPORTE SEMANAL/index.html`, incluidos `semana.label`, `semana.corte` y
 `semana.hora`. Nada más de ese archivo.
 
-## Paso 4 · Reconciliar con código  ⚠️ OBLIGATORIO
+## Paso 4 · Verificar  ⚠️ OBLIGATORIO, antes del commit
 
-Antes de publicar, comprueba con un script —no a ojo— que:
+No improvises comprobaciones. Ejecuta el script del repositorio, **con los
+cambios todavía sin commitear** para que pueda compararlos con lo publicado:
 
-- la suma de ingresados por área es igual al total del mes;
-- la suma de cerrados por área es igual al total de cerrados del mes;
-- `cumple + fuera` es igual a `cerrados` en el bloque `sla`;
-- la suma de la columna de prioridad cuadra con el total de `sla`;
-- cada serie mensual tiene el número de meses que le corresponde;
-- ningún porcentaje queda fuera de 0–100.
+```
+python3 .automatizacion/verificar.py
+```
 
-Si algo no cuadra: no publiques y avisa con el detalle.
+Comprueba treinta y pico de cosas en tres bloques: que los totales cuadren
+entre sí (SLA, prioridad, áreas, mantenimientos, ANS, reaperturas,
+informes), que las series tengan los meses que deben y los porcentajes
+estén en rango, y que los meses ya cerrados no se hayan movido respecto a
+la versión publicada.
+
+- **Sale con código 0** → se puede publicar.
+- **Sale con código 1** → hay un FALLA. **No publiques**, no envíes el
+  correo, no toques la Bitácora: avisa con la salida del script.
+- **AVISO** no detiene la publicación, pero sí exige que vuelvas al PDF y
+  confirmes ese punto a ojo antes de seguir. El más importante: si cambia
+  un mes ya cerrado (enero a octubre), casi siempre es una lectura
+  equivocada, no un cambio real del dato.
+
+Pega la salida completa del script en la notificación final. Es la prueba
+de que la transcripción se revisó.
 
 ## Paso 5 · Fecha del portal
 
