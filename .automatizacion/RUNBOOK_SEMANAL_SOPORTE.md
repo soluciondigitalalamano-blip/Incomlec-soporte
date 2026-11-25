@@ -56,32 +56,17 @@ Si alguna página no corresponde al corte:
 
 Nunca publiques como dato nuevo una cifra repetida de la semana anterior.
 
-## ⛔ Bloqueo abierto · la plantilla no está parametrizada
+## La plantilla ya está parametrizada
 
-**Hasta que esto se resuelva, no se puede publicar una semana nueva.**
+Los textos de la página —encabezado, pie, títulos, insights, la etiqueta
+del eje— se derivan de `DATA.semana` y de los propios valores mediante las
+constantes `CORTE`, `CORTE_DM`, `CORTE_DIA`, `MES_AL`, `MES_AL_C` y `RANGO`.
+**No escribas la fecha a mano en ninguna parte.** Si al revisar encuentras
+una fecha literal en el código de presentación, conviértela en derivada en
+vez de editarla.
 
-El comentario del propio `index.html` dice «Para otra semana: actualiza solo
-este bloque». **No es cierto.** Fuera del bloque `DATA`, el código de
-presentación tiene la fecha del corte escrita a mano en unas 39 cadenas:
-`corte 10 nov`, `noviembre (al 10)`, `al 10 nov`, `Corte 10 nov 2026`,
-`'4 – 10 nov'`, y la etiqueta del eje `j===NOV?'10 nov':m`.
-
-Actualizar solo `DATA` dejaría el encabezado diciendo una fecha y el resto
-de la página otra, en decenas de sitios.
-
-Hay además texto fijo que contradice los datos nuevos:
-
-- Cuatro lugares afirman «El informe no registra reaperturas» y «Bajo nivel
-  de reaperturas». El corte del 18-nov trae 4 reaperturas (13,3 %).
-- Una nota de mantenimientos trae escrito a mano `36,4 % al corte del 10
-  nov; faltan 14 del mes`, con cifras del corte anterior.
-- `reabiertos.tecnicos` y `reabiertos.tickets` existen en `DATA` pero la
-  presentación no los usa: siempre imprime el caso de cero.
-
-Qué hace falta: derivar esas cadenas de `DATA.semana` y hacer que los
-textos de reaperturas y mantenimientos dependan de los valores, no de
-constantes. Mientras tanto, el agente debe **detenerse en este paso y
-avisar**, no publicar.
+Lo mismo con los textos de reaperturas y de mantenimientos: dependen de
+`DATA.reabiertos` y `DATA.mantenimientos`, no de constantes.
 
 ## Paso 3 · Transcribir
 

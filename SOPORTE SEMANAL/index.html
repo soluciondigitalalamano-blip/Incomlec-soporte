@@ -428,8 +428,8 @@ tfoot td{font-weight:800;border-bottom:0;border-top:2px solid var(--line)}
     </nav>
     <div class="side-card" role="note">
       <div class="sc-h"><span class="sc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 2v4M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg></span><div><b>Corte semanal</b><small>Informe de Soporte · Power BI</small></div></div>
-      <span class="sc-pill">Semana 4 – 10 nov 2026</span>
-      <div class="sc-box"><span>Información al</span><strong>10 nov 2026</strong><em>113 abiertos · noviembre lleva 138 ingresados y 130 cerrados</em></div>
+      <span class="sc-pill" id="sc-pill"></span>
+      <div class="sc-box"><span>Información al</span><strong id="sc-corte"></strong><em id="sc-detalle"></em></div>
     </div>
   </aside>
 
@@ -450,7 +450,7 @@ tfoot td{font-weight:800;border-bottom:0;border-top:2px solid var(--line)}
       <section class="view" id="v-clientes"></section>
       <section class="view" id="v-compromisos"></section>
     </main>
-    <footer class="muted" style="font-size:12px;padding:4px 6px 10px">Fuente: Informe de Soporte Incomelec (Power BI) · semana del 4 al 10 de noviembre de 2026 (corte 10 nov · 07:00). Octubre con cierre de mes completo; noviembre al corte.</footer>
+    <footer class="muted" style="font-size:12px;padding:4px 6px 10px"><span id="pie-fuente"></span></footer>
   </div>
 </div>
 
@@ -489,14 +489,24 @@ tfoot td{font-weight:800;border-bottom:0;border-top:2px solid var(--line)}
 </script>
 <script>
 /* =====================================================================
-   1. DATOS — transcritos del «10112026 INFORME SOPORTE» (Power BI)
-      Semana del 4 al 10 de noviembre de 2026 (corte 10 nov · 07:00).
+   1. DATOS — transcritos del «18112026 INFORME SOPORTE» (Power BI)
+      Semana del 12 al 18 de noviembre de 2026 (corte 18 nov · 07:00).
       Octubre con cierre de mes completo; noviembre al corte.
-      Para otra semana: actualiza solo este bloque.
+
+      Para otra semana se actualiza SOLO este bloque: los textos de la
+      página (encabezado, pie, insights, títulos) se derivan de
+      DATA.semana y de los propios valores. No escribas la fecha a mano.
+
+      Secciones que este export NO trajo y conservan el corte anterior:
+      · semana.dias — el export del 18 nov no incluye «CONSOLIDADO DIARIOS».
+      · abiertosKpi, abiertosFinMes, abiertosArea, antiguedad y
+        abiertosCliente — la página «INFORME TICKETS ABIERTOS» venía
+        congelada con Max Fecha Datos = 10/11/2026.
    ===================================================================== */
 const DATA = {
-  semana:{label:'Semana 4 – 10 nov 2026',corte:'10 nov 2026',hora:'07:00',
-    // Tickets abiertos: corte anterior (4 nov) y consolidado diario de noviembre
+  semana:{label:'Semana 12 – 18 nov 2026',corte:'18 nov 2026',hora:'07:00',
+    // Consolidado diario: el export del 18 nov NO trae la página «CONSOLIDADO DIARIOS»,
+    // así que estos valores siguen siendo los del corte anterior (4 – 10 nov).
     dias:[
       {c:'4 nov',l:'miércoles 4 de noviembre',v:102,nota:'Corte del informe anterior'},
       {c:'5 nov',l:'jueves 5 de noviembre',v:97,nota:'Consolidado diario'},
@@ -504,17 +514,17 @@ const DATA = {
       {c:'7 nov',l:'sábado 7 de noviembre',v:124,nota:'Consolidado diario'},
       {c:'8 nov',l:'domingo 8 de noviembre',v:112,nota:'Consolidado diario'},
       {c:'9 nov',l:'lunes 9 de noviembre',v:112,nota:'Consolidado diario'},
-      {c:'10 nov',l:'martes 10 de noviembre',v:113,nota:'Consolidado diario · corte 07:00'}]},
+      {c:'10 nov',l:'martes 10 de noviembre',v:113,nota:'Último dato diario disponible'}]},
   meses:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov'],
-  mesesLargos:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre (al 10)'],
+  mesesLargos:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre (al 18)'],
   flujo:{ // «Histórico por mes de Ingresados y Cerrados 2026» + «Ratio Operativo por Mes»
-    ingresados:[312,306,393,339,352,299,337,380,472,501,138],
-    cerradosNuevos:[248,251,323,281,298,234,295,297,411,437,94],
-    cerradosTotal:[304,335,410,385,369,308,341,358,494,521,130],
-    pendientes:[64,55,70,58,54,65,42,83,61,64,44],
-    ratio:[79.5,82.0,82.2,82.9,84.7,78.3,87.5,78.2,87.1,87.2,68.1]
+    ingresados:[312,306,393,339,352,299,337,380,472,501,278],
+    cerradosNuevos:[248,251,323,281,298,234,295,297,411,437,214],
+    cerradosTotal:[304,335,410,385,369,308,341,358,494,521,273],
+    pendientes:[64,55,70,58,54,65,42,83,61,64,64],
+    ratio:[79.5,82.0,82.2,82.9,84.7,78.3,87.5,78.2,87.1,87.2,77.0]
   },
-  tarjetasAnio:{ingresados:3790,cerrados:3681,abiertos:109,pct:97.1,atencionDias:2.4,promDia:12},
+  tarjetasAnio:{ingresados:3956,cerrados:3849,abiertos:107,pct:97.3,atencionDias:2.4,promDia:12},
   areas:{
     sis:{n:'Área sistemas nivel 1',s:'SIS'}, sn2:{n:'Área sistemas nivel 2',s:'SN2'}, bog:{n:'Área técnica Bogotá',s:'BOG'}, med:{n:'Área técnica Medellín',s:'MED'},
     com:{n:'Área Comercial',s:'COM'}, esp:{n:'En espera de respuesta del cliente',s:'ESP'}, pfe:{n:'Parqueoo F.E.',s:'PFE'},
@@ -524,9 +534,9 @@ const DATA = {
   },
   // «Tickets por áreas 2026» — octubre completo: [ingresados, cerrados]
   areaOct:{sis:[262,248],sn2:[2,0],bog:[96,88],com:[28,25],med:[34,29],pfe:[16,14],idi:[9,7],esp:[28,20],fly:[1,1],lab:[3,1],gar:[2,0],fab:[0,0],app:[0,0],caj:[1,0],cpr:[3,1],sp1:[8,0],sp2:[8,3]},
-  // «Descripción por área» — noviembre al 10: [ingresados, cerrados, prom. ingresados/día, prom. atención días]
-  areaNov:{sis:[85,70,9,0.4],bog:[14,7,2,0.3],sn2:[7,1,2,5.0],esp:[7,2,1,1.5],pfe:[7,6,2,1.3],med:[6,3,2,1.7],idi:[5,2,2,1.5],com:[4,2,1,6.5],cpr:[2,0,1,0.0],sp2:[1,1,1,1.0],sp1:[0,0,0,0.0],fly:[0,0,0,0.0],gar:[0,0,0,0.0],lab:[0,0,0,0.0],app:[0,0,0,0.0],caj:[0,0,0,0.0]},
-  // «Tickets total abiertos por nivel» + «Tickets abiertos por área» (corte 10 nov): [total, de ellos creados en 2025]
+  // «Descripción por área» — noviembre al 18: [ingresados, cerrados, prom. ingresados/día, prom. atención días]
+  areaNov:{sis:[160,145,9,0.9],bog:[36,26,2,1.4],esp:[19,12,2,3.2],med:[13,7,2,1.7],pfe:[11,7,2,1.7],com:[10,9,1,5.2],idi:[10,3,1,2.3],sn2:[9,2,1,5.5],sp2:[5,1,1,7.0],cpr:[3,1,1,6.0],lab:[1,0,1,0.0],caj:[1,1,1,6.0],sp1:[0,0,0,0.0],fly:[0,0,0,0.0],gar:[0,0,0,0.0],app:[0,0,0,0.0]},
+  // «Tickets abiertos por área» — página congelada en el corte del ${CORTE_DM} en el export del 18: [total, de ellos creados en 2025]
   abiertosArea:{sis:[30,0],sp1:[14,0],esp:[12,0],bog:[11,1],med:[11,0],sp2:[7,0],pfe:[7,0],sn2:[5,0],cpr:[5,1],idi:[5,0],gar:[3,0],lab:[2,0],caj:[1,0]},
   abiertosKpi:{total:113,clientes:46,antiguedadDias:35,mas7dias:69,antiguedadHoras:837.6},
   abiertosFinMes:[94,84,93,88,88,87,85,107,109,98,113],
@@ -546,49 +556,51 @@ const DATA = {
     [2026,'octubre','Universidad…',1,'2 %',12,288.0]
   ],
   sla:{ // «Informe tiempos de servicio» (horas)
-    promedio:77.0, cumplePct:47.3, cumple:1752, fuera:1955, cerrados:3707, promFuera:142.7, promATiempo:3.7,
-    general:[139.6,102.3,107.0,98.2,70.0,90.0,66.2,57.5,59.5,28.0,8.9],
-    aTiempo:[5.3,3.3,4.2,3.5,4.3,4.3,4.3,3.0,3.3,3.1,2.1],
-    fueraT:[218.0,193.3,186.6,162.2,121.4,152.4,113.0,119.5,120.6,61.3,23.5],
-    nuevosATiempo:[16.5,10.8,12.2,11.3,12.0,14.3,11.3,7.9,9.3,8.3,7.8],
-    nuevosFuera:[127.7,113.3,125.3,120.3,122.9,136.2,145.3,143.6,118.5,108.3,42.5],
-    prioridad:[['Nivel PLATA',2664,1501,1163,52.8,56.3],['Nivel ORO',998,241,757,141.7,24.1],['Nivel DIAMANTE',45,10,35,74.6,22.2]],
+    promedio:78.6, cumplePct:47.1, cumple:1814, fuera:2035, cerrados:3849, promFuera:145.4, promATiempo:3.6,
+    general:[139.5,102.3,118.0,98.6,70.0,90.0,64.6,67.4,65.7,34.4,17.0],
+    aTiempo:[5.3,3.3,4.2,3.5,4.3,4.3,4.3,3.0,3.3,3.1,2.5],
+    fueraT:[217.9,192.1,204.8,162.9,121.4,151.5,110.4,138.7,132.5,73.2,39.5],
+    nuevosATiempo:[16.5,10.9,12.2,11.3,12.0,14.4,11.3,7.9,9.3,8.3,7.9],
+    nuevosFuera:[127.7,112.2,124.5,120.3,122.9,135.0,145.3,142.1,118.9,105.1,79.7],
+    prioridad:[['Nivel PLATA',2760,1555,1205,52.4,56.3],['Nivel ORO',1019,236,783,151.1,23.2],['Nivel DIAMANTE',70,23,47,58.5,32.9]],
     // el informe muestra dos filas «Escalado a Spar…» sin el número completo
-    area:[['fly',731.8,14.1],['sn2',593.9,null],['fab',398.7,3.7],['gar',235.3,null],['spx',201.2,12.2],['spy',200.0,7.7],['lab',167.4,0.5],['app',161.6,5.5],['idi',157.6,6.9],['cpr',153.6,null],['com',92.3,6.2],['med',85.2,6.9],['pfe',79.9,4.4],['bog',76.9,6.6]]
+    area:[['fly',731.8,14.1],['sn2',359.6,null],['spx',321.1,7.9],['gar',235.3,null],['spy',213.0,10.3],['lab',168.1,0.5],['app',161.6,5.5],['idi',159.1,6.9],['cpr',153.6,null],['com',92.1,6.2],['med',84.8,6.8],['pfe',80.8,4.4],['bog',79.8,6.6],['sis',66.3,3.1]]
   },
-  ansOct:{ // «Cumplimiento ANS por técnico» — noviembre (al 10)
-    cerradosMes:94, cerradosTecnicos:90, cumple:62, pctMes:68.9, pctTotal:54.1,
-    ingenieros:[['Nicolás Benítez H.',70.7],['Soporte Incomelec',67.3]],
-    areaCierre:[['sis',60],['bog',1],['otr',1]] // 'otr': porción de 1 ticket sin etiqueta en el gráfico del informe
+  ansOct:{ // «Cumplimiento ANS por técnico» — noviembre (al 18)
+    cerradosMes:214, cerradosTecnicos:211, cumple:129, pctMes:61.14, pctTotal:54.15,
+    ingenieros:[['Nicolás Benítez H.',64.15],['Soporte Incomelec',60.90]],
+    areaCierre:[['sis',121],['bog',6],['otr',2]] // 'otr': porciones pequeñas sin etiqueta en el gráfico del informe
   },
   reabiertos:{ // «Informe general tickets reabiertos»
-    cerradosAnio:3707, cerradosSitio:8, total:0, pct:null, promedio:0, tecnicos:[], tickets:[]
+    cerradosAnio:3849, cerradosSitio:30, total:4, pct:13.3, promedio:1,
+    tecnicos:[['Mauricio Caballero - Soporte Hardware',5,1,20.0],['Natalia Rojas-Soporte Hardware',3,1,33.3],['Jesús Díaz-Biomig/Veripax Cartagena',1,1,100.0],['Jhon Béltran - Soporte Parking Dorado',1,1,100.0]],
+    tickets:[['Aeropuerto Rafael Núñez (Cartagena)',1,'Jesús Díaz-Biomig/Veripax Cartagena',34858],['C.C. Titán Plaza (49)',1,'Jhon Béltran - Soporte Parking Dorado',34927],['C.C. Titán Plaza (49)',1,'Mauricio Caballero - Soporte Hardware',34909],['Parqueadero Plaza Claro (11)',1,'Natalia Rojas-Soporte Hardware',34544]]
   },
-  clientes:[ // «Clientes con más ingreso y cierre» + «Movimientos entradas clientes» — noviembre al 10
-    {k:'city',n:'Consorcio Citymovil…',ini:'CC',ing:15,cer:14,ent:0,match:['Citymovil']},
-    {k:'ind',n:'Indigo-Aeropuerto el… (Indigo-Aeropuerto)',ini:'IA',ing:12,cer:9,ent:78900,match:['Indigo']},
-    {k:'cdr',n:'Ciudad del Rio (38) (GMC-Ciudad del Rio)',ini:'CR',ing:7,cer:7,ent:8383,match:['Ciudad del Rio']},
-    {k:'ppc',n:'Parqueadero Plaza C… (CC Plaza Claro)',ini:'PP',ing:7,cer:4,ent:9046,match:['Plaza Claro']},
-    {k:'eaf',n:'Universidad EAFIT (63)',ini:'UE',ing:7,cer:6,ent:19352,match:['EAFIT']},
-    {k:'may',n:'C.C. Mayorca 2 (51)',ini:'M2',ing:6,cer:6,ent:54266,match:['Mayorca']},
-    {k:'air',n:'Airplan - Aeropuert… (Airplan Rionegro)',ini:'AR',ing:5,cer:3,ent:47860,match:['Airplan']},
-    {k:'pca',n:'C.C. Parque Caracolí (68)',ini:'PC',ing:5,cer:2,ent:22834,match:['Parque Caracolí']},
-    {k:'tit',n:'C.C. Titán Plaza (49)',ini:'TP',ing:5,cer:0,ent:16050,match:['Titán Plaza']},
-    {k:'sfp',n:'San Fernando Plaza (…',ini:'SF',ing:5,cer:4,ent:28417,match:['San Fernando']}
+  clientes:[ // «Clientes con más ingreso y cierre» + «Movimientos entradas clientes» — noviembre al 18
+    {k:'ind',n:'Aeropuerto Internac… (Indigo-Aeropuerto)',ini:'AI',ing:25,cer:22,ent:77000,match:['Indigo','Aeropuerto Internac']},
+    {k:'city',n:'Consorcio Citymovil…',ini:'CC',ing:21,cer:21,ent:0,match:['Citymovil']},
+    {k:'tit',n:'C.C. Titán Plaza (49)',ini:'TP',ing:17,cer:8,ent:65381,match:['Titán Plaza']},
+    {k:'ppc',n:'Parqueadero Plaza C… (CC Plaza Claro)',ini:'PP',ing:15,cer:15,ent:63613,match:['Plaza Claro']},
+    {k:'may',n:'C.C. Mayorca 2 (51)',ini:'M2',ing:13,cer:12,ent:54266,match:['Mayorca']},
+    {k:'eaf',n:'Universidad EAFIT (63)',ini:'UE',ing:12,cer:9,ent:20500,match:['EAFIT']},
+    {k:'pca',n:'C.C. Parque Caracolí (68)',ini:'PC',ing:9,cer:2,ent:23000,match:['Parque Caracolí']},
+    {k:'cdr',n:'Ciudad del Rio (38) (GMC-Ciudad del Rio)',ini:'CR',ing:9,cer:8,ent:8383,match:['Ciudad del Rio']},
+    {k:'sfp',n:'San Fernando Plaza (…',ini:'SF',ing:9,cer:8,ent:28000,match:['San Fernando']},
+    {k:'sab',n:'Universidad de La Sa… (Universidad de la Sabana)',ini:'US',ing:9,cer:4,ent:41370,match:['Sabana','La Sa']}
   ],
-  informes:{esperados:22,ejecutados:20,faltantes:2,pct:90.9, // noviembre
-    filas:[['Diamante',11,9,2,0,11,81.8,81.82],['Oro',11,11,0,0,11,100.0,100.00]]},
-  mantenimientos:{esperados:165,ejecutadaAcum:150,faltantes:42,pct:90.9,
+  informes:{esperados:22,ejecutados:22,faltantes:0,pct:100.0, // noviembre
+    filas:[['Diamante',11,11,0,0,11,100.0,100.00],['Oro',11,11,0,0,11,100.0,100.00]]},
+  mantenimientos:{esperados:165,ejecutadaAcum:154,faltantes:38,pct:93.3,
     meses:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
     largos:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
     real:[8,12,9,14,11,21,10,19,13,17,22,9],
     pend:[9,1,1,1,6,4,1,3,4,3,0,0],
     total:[17,13,10,15,17,25,11,22,17,20,22,9],
-    realEj:[7,10,9,8,8,20,7,17,12,17,8,0],
+    realEj:[7,10,9,8,8,20,7,17,12,17,12,0],
     ejPend:[9,1,0,1,5,4,1,1,2,3,0,0],
-    acum:[16,11,9,9,13,24,8,18,14,20,8,0],
-    efReal:[87.5,83.3,100,57.1,72.7,95.2,70.0,89.5,92.3,100,36.4,0],
-    efTot:[94.1,84.6,90.0,60.0,76.5,96.0,72.7,81.8,82.4,100,36.4,0]}
+    acum:[16,11,9,9,13,24,8,18,14,20,12,0],
+    efReal:[87.5,83.3,100,57.1,72.7,95.2,70.0,89.5,92.3,100,54.5,0],
+    efTot:[94.1,84.6,90.0,60.0,76.5,96.0,72.7,81.8,82.4,100,54.5,0]}
 };
 
 /* =====================================================================
@@ -596,6 +608,23 @@ const DATA = {
    ===================================================================== */
 const STATE={view:'resumen',areaPer:'oct',slaModo:'todos',selected:null,pinned:false,theme:'light',rendered:{},charts:{}};
 const F=DATA.flujo, OCT=9, NOV=10, SEP=8;
+
+/* Cadenas del corte, derivadas de DATA.semana — NO escribir la fecha a mano.
+   Al cambiar de semana basta con actualizar DATA.semana. */
+const CORTE=DATA.semana.corte;                                   // '18 nov 2026'
+const CORTE_DM=CORTE.replace(/\s+\d{4}$/,'');                    // '18 nov'
+const CORTE_DIA=parseInt(CORTE,10);                              // 18
+const MES_AL=`${DATA.mesesLargos[NOV].replace(/\s*\(.*$/,'').toLowerCase()} (al ${CORTE_DIA})`;
+const MES_AL_C=MES_AL.charAt(0).toUpperCase()+MES_AL.slice(1);
+const RANGO=DATA.semana.label.replace(/^Semana\s+/,'').replace(/\s+\d{4}$/,'');
+/* Encabezado y pie: se rellenan desde DATA, no se escriben a mano */
+document.addEventListener('DOMContentLoaded',()=>{
+  const g=id=>document.getElementById(id);
+  if(g('sc-pill')) g('sc-pill').textContent=DATA.semana.label;
+  if(g('sc-corte')) g('sc-corte').textContent=CORTE;
+  if(g('sc-detalle')) g('sc-detalle').textContent=`${DATA.abiertosKpi.total} abiertos · noviembre lleva ${DATA.flujo.ingresados[NOV]} ingresados y ${DATA.flujo.cerradosTotal[NOV]} cerrados`;
+  if(g('pie-fuente')) g('pie-fuente').textContent=`Fuente: Informe de Soporte Incomelec (Power BI) · ${DATA.semana.label.toLowerCase()} (corte ${CORTE_DM} · ${DATA.semana.hora}). Octubre con cierre de mes completo; noviembre al corte.`;
+});
 F.cerradosAntiguos=F.cerradosTotal.map((t,i)=>t-F.cerradosNuevos[i]);
 const sum=a=>a.reduce((s,v)=>s+(v||0),0);
 const $=(s,r=document)=>r.querySelector(s);
@@ -712,11 +741,11 @@ const GO={
   area(k){const A=DATA.areas[k],ab=DATA.abiertosArea[k]||[0,0],o=DATA.areaOct[k]||[0,0],n=DATA.areaNov[k]||[0,0,0,0];
     const sl=DATA.sla.area.find(r=>r[0]===k),ans=DATA.ansOct.areaCierre.find(r=>r[0]===k);
     const pill=ab[0]>=10?`<span class="pill p-bad">${ic('alert')} ${ab[0]} abiertos al corte</span>`:o[0]&&o[1]===0?`<span class="pill p-warn">${ic('alert')} Sin cierres en octubre</span>`:`<span class="pill p-neu">${ab[0]} abiertos al corte</span>`;
-    openInspector({kind:'Área · '+A.s,title:A.n,sub:'Cola de atención de soporte · corte 10 nov',pill,key:'area-'+k,
-      minis:[['Abiertos al 10 nov',nf(ab[0]),ab[0]/AB*100],['Ingresados octubre',nf(o[0])],['Cerrados octubre',nf(o[1])],['Efectividad octubre',o[0]?pc(ef(o)):'Sin ingresos',ef(o)]],
+    openInspector({kind:'Área · '+A.s,title:A.n,sub:`Cola de atención de soporte · corte ${CORTE_DM}`,pill,key:'area-'+k,
+      minis:[[`Abiertos al ${CORTE_DM}`,nf(ab[0]),ab[0]/AB*100],['Ingresados octubre',nf(o[0])],['Cerrados octubre',nf(o[1])],['Efectividad octubre',o[0]?pc(ef(o)):'Sin ingresos',ef(o)]],
       sections:[
-        {t:'Octubre y noviembre',h:tbl([['Mes'],['Ingresados',1],['Cerrados',1],['% efectividad',1],['Sin cerrar',1]],[{c:['Octubre',nf(o[0]),nf(o[1]),o[0]?pc(ef(o)):'—',nf(o[0]-o[1])]},{c:['Noviembre (al 10)',nf(n[0]),nf(n[1]),n[0]?pc(ef(n)):'—',nf(n[0]-n[1])]}])},
-        {t:'Ritmo y tiempos',h:kv([['Promedio de tickets ingresados por día (noviembre al 10)',nf(n[2])],['Promedio de atención (noviembre al 10)',atTxt(n)],['Participación en los ingresos de octubre',pc(o[0]/F.ingresados[OCT]*100)],['Promedio general ANS del año',sl?hf(sl[1]):'Sin dato'],['Promedio cuando cumple ANS',sl&&sl[2]!=null?hf(sl[2]):'Sin dato'],['Cerrados dentro del ANS en noviembre (al 10)',ans?nf(ans[1]):'—']])},
+        {t:'Octubre y noviembre',h:tbl([['Mes'],['Ingresados',1],['Cerrados',1],['% efectividad',1],['Sin cerrar',1]],[{c:['Octubre',nf(o[0]),nf(o[1]),o[0]?pc(ef(o)):'—',nf(o[0]-o[1])]},{c:[`${MES_AL_C}`,nf(n[0]),nf(n[1]),n[0]?pc(ef(n)):'—',nf(n[0]-n[1])]}])},
+        {t:'Ritmo y tiempos',h:kv([['Promedio de tickets ingresados por día (noviembre al 10)',nf(n[2])],['Promedio de atención (noviembre al 10)',atTxt(n)],['Participación en los ingresos de octubre',pc(o[0]/F.ingresados[OCT]*100)],['Promedio general ANS del año',sl?hf(sl[1]):'Sin dato'],['Promedio cuando cumple ANS',sl&&sl[2]!=null?hf(sl[2]):'Sin dato'],[`Cerrados dentro del ANS en ${MES_AL}`,ans?nf(ans[1]):'—']])},
         {t:'Backlog al corte',h:kv([['Tickets abiertos',nf(ab[0])],['Creados en 2025',nf(ab[1])],['Creados en 2026',nf(ab[0]-ab[1])],['Participación en el backlog',pc(ab[0]/AB*100)]])}]});},
   dia(i){i=+i;const d=WK[i],p=i?WK[i-1].v:null;
     openInspector({kind:i===0?'Referencia · corte anterior':'Semana · tickets abiertos',title:capi(d.l),sub:d.nota,key:'dia-'+i,
@@ -724,17 +753,17 @@ const GO={
       minis:[['Abiertos',nf(d.v)],['Cambio vs '+(i?WK[i-1].c:'—'),p==null?'—':sg(d.v-p)],['Cambio vs corte anterior ('+WK[0].c+': '+REF+')',i?sg(d.v-REF):'—']],
       sections:[{t:DATA.semana.label,h:weekTbl()}]});},
   mes(i){i=+i;const ing=F.ingresados[i],n=F.cerradosNuevos[i],a=F.cerradosAntiguos[i];
-    openInspector({kind:'Mes · 2026',title:mesTxt(i)+' 2026',sub:i===NOV?'Ingresados, cierres y pendientes al corte del 10 nov':'Ingresados, cierres y pendientes',key:'mes-'+i,
+    openInspector({kind:'Mes · 2026',title:mesTxt(i)+' 2026',sub:i===NOV?`Ingresados, cierres y pendientes al corte del ${CORTE_DM}`:'Ingresados, cierres y pendientes',key:'mes-'+i,
       pill:`<span class="pill p-neu">Ratio de cierre ${pc(F.ratio[i])}</span>`,
       minis:[['Ingresados',nf(ing)],['Cerrados nuevos',nf(n),n/ing*100],['Cerrados antiguos',nf(a)],['Pendientes',nf(F.pendientes[i])]],
       sections:[{t:'Detalle',h:kv([['Tickets ingresados',nf(ing)],['Cerrados nuevos',nf(n)],['Cerrados antiguos (de meses previos)',nf(a)],['Total cerrados',nf(F.cerradosTotal[i])],['Pendientes',nf(F.pendientes[i])],['% ratio (cerrados nuevos / ingresados)',pc(F.ratio[i])],['Promedio general ANS',hf(DATA.sla.general[i])],['Promedio a tiempo / fuera de tiempo',hf(DATA.sla.aTiempo[i])+' / '+hf(DATA.sla.fueraT[i])],[i===NOV?'Abiertos al corte (10 nov)':'Abiertos al cierre',nf(DATA.abiertosFinMes[i])]])},
         {t:'Todos los meses',h:tbl([['Mes'],['Ingresados',1],['Cerr. nuevos',1],['Cerr. antiguos',1],['Pendientes',1],['Ratio',1]],DATA.meses.map((m,j)=>({c:[mesTxt(j),nf(F.ingresados[j]),nf(F.cerradosNuevos[j]),nf(F.cerradosAntiguos[j]),nf(F.pendientes[j]),pc(F.ratio[j])],_go:'mes',_arg:j})),['Total',nf(sum(F.ingresados)),nf(sum(F.cerradosNuevos)),nf(sum(F.cerradosAntiguos)),nf(sum(F.pendientes)),''])},
         {h:i===OCT||i===NOV?`<button class="chip sm" data-go="verArea" data-arg="${i===OCT?'oct':'nov'}">Ver desglose por área</button>`:''}]});},
   verArea(p){closeInspector();STATE.areaPer=p;STATE.rendered.flujo=false;go('flujo');},
-  finMes(i){i=+i;const v=DATA.abiertosFinMes;openInspector({kind:'Backlog',title:i===NOV?'Corte 10 nov 2026':mesTxt(i)+' 2026',sub:'Tickets que quedaron abiertos',key:'fin-'+i,
+  finMes(i){i=+i;const v=DATA.abiertosFinMes;openInspector({kind:'Backlog',title:i===NOV?`Corte ${CORTE}`:mesTxt(i)+' 2026',sub:'Tickets que quedaron abiertos',key:'fin-'+i,
     minis:[['Abiertos',nf(v[i])],['Cambio vs mes anterior',i?sg(v[i]-v[i-1]):'—']],
-    sections:[{t:'Todos los meses',h:tbl([['Mes'],['Abiertos',1]],v.map((x,j)=>({c:[j===NOV?'Corte 10 nov':mesTxt(j),nf(x)],_go:'finMes',_arg:j})))}]});},
-  antig(i){i=+i;const r=DATA.antiguedad[i];openInspector({kind:'Antigüedad del backlog',title:'Creados en '+r[0],sub:'Abiertos al 10 nov según mes de creación',key:'ant-'+i,
+    sections:[{t:'Todos los meses',h:tbl([['Mes'],['Abiertos',1]],v.map((x,j)=>({c:[j===NOV?`Corte ${CORTE_DM}`:mesTxt(j),nf(x)],_go:'finMes',_arg:j})))}]});},
+  antig(i){i=+i;const r=DATA.antiguedad[i];openInspector({kind:'Antigüedad del backlog',title:'Creados en '+r[0],sub:`Abiertos al ${CORTE_DM} según mes de creación`,key:'ant-'+i,
     minis:[['Tickets abiertos',nf(r[1])],['Del total abierto',pc(r[1]/AB*100),r[1]/AB*100]],
     sections:[{t:'Todos los meses de creación',h:tbl([['Mes de creación'],['Abiertos',1],['%',1]],DATA.antiguedad.map((x,j)=>({c:[x[0],nf(x[1]),pc(x[1]/AB*100)],_go:'antig',_arg:j})),['Total',nf(AB),'100,0 %'])}]});},
   abCli(i){i=+i;const r=DATA.abiertosCliente[i];const same=DATA.abiertosCliente.map((x,j)=>[x,j]).filter(([x])=>x[2]===r[2]);
@@ -749,24 +778,24 @@ const GO={
     openInspector({kind:'Área · tiempos ANS',title:'Escalado a Spar…',sub:'Promedio de horas del año · el informe no muestra si es Spark 1 o Spark 2',key:'sla-'+r[0],minis:[['Promedio general',hf(r[1])],['Cuando cumple',hf(r[2])]],
       sections:[{t:'Todas las áreas',h:tbl([['Área'],['General (h)',1],['A tiempo (h)',1]],DATA.sla.area.map((x,j)=>({c:[aName(x[0]),nf(x[1],1),x[2]==null?'—':nf(x[2],1)],_go:'slaArea',_arg:j})))},
         {h:'<button class="chip sm" data-go="area" data-arg="sp1">Ver Escalado a Spark 1</button> <button class="chip sm" data-go="area" data-arg="sp2">Ver Escalado a Spark 2</button>'}]});},
-  ingeniero(i){i=+i;const r=DATA.ansOct.ingenieros[i];openInspector({kind:'Ingeniero · ANS noviembre (al 10)',title:r[0],sub:'% de tickets cerrados dentro del ANS',key:'ing-'+i,
+  ingeniero(i){i=+i;const r=DATA.ansOct.ingenieros[i];openInspector({kind:`Ingeniero · ANS ${MES_AL}`,title:r[0],sub:'% de tickets cerrados dentro del ANS',key:'ing-'+i,
     pill:`<span class="pill ${r[1]>=100?'p-good':r[1]<50?'p-bad':'p-neu'}">${pc(r[1])}</span>`,
     minis:[['Cumplimiento',pc(r[1]),r[1]],['Promedio del mes',pc(DATA.ansOct.pctMes),DATA.ansOct.pctMes]],
-    sections:[{t:'Ranking de noviembre (al 10)',h:tbl([['Ingeniero'],['% efectividad SLA',1]],DATA.ansOct.ingenieros.map((x,j)=>({c:[x[0],pc(x[1])],_go:'ingeniero',_arg:j})))}]});},
+    sections:[{t:`Ranking de ${MES_AL}`,h:tbl([['Ingeniero'],['% efectividad SLA',1]],DATA.ansOct.ingenieros.map((x,j)=>({c:[x[0],pc(x[1])],_go:'ingeniero',_arg:j})))}]});},
   cliente(k){const c=DATA.clientes.find(x=>x.k===k);const ab=DATA.abiertosCliente.map((r,i)=>[r,i]).filter(([r])=>c.match.some(m=>r[2].includes(m)));
     const per=c.ent?c.ing/c.ent*10000:null;
-    openInspector({kind:'Cliente · noviembre 2026 (al 10)',title:c.n,sub:'Top 10 de clientes por tickets ingresados en noviembre (al 10)',key:'cli-'+k,
+    openInspector({kind:`Cliente · noviembre 2026 (al ${CORTE_DIA})`,title:c.n,sub:`Top 10 de clientes por tickets ingresados en ${MES_AL}`,key:'cli-'+k,
       pill:c.ing-c.cer>=1?`<span class="pill p-warn">${c.ing-c.cer} sin cerrar en noviembre</span>`:`<span class="pill p-good">${pc(c.cer/c.ing*100)} cerrados</span>`,
       minis:[['Ingresados',nf(c.ing)],['Cerrados',nf(c.cer),c.cer/c.ing*100],['Movimientos de entrada',nf(c.ent)],['Tickets por 10.000 entradas',per?nf(per,1):'Sin movimientos']],
-      sections:[{t:'Tickets abiertos de este cliente (corte 10 nov)',h:ab.length?tbl([['Año'],['Mes'],['Abiertos',1],['Días',1]],ab.map(([r,i])=>({c:[r[0],r[1],nf(r[3]),nf(r[5])],_go:'abCli',_arg:i}))):'<p class="note">No aparece en la tabla de tickets abiertos por cliente.</p>'},
-        {t:'Tickets reabiertos',h:'<p class="note">El informe no registra reaperturas.</p>'}]});},
+      sections:[{t:`Tickets abiertos de este cliente (corte ${CORTE_DM})`,h:ab.length?tbl([['Año'],['Mes'],['Abiertos',1],['Días',1]],ab.map(([r,i])=>({c:[r[0],r[1],nf(r[3]),nf(r[5])],_go:'abCli',_arg:i}))):'<p class="note">No aparece en la tabla de tickets abiertos por cliente.</p>'},
+        {t:'Tickets reabiertos',h:(()=>{const rr=DATA.reabiertos.tickets.filter(t=>c.match.some(m=>t[0].toLowerCase().includes(m.toLowerCase())));return rr.length?tbl([['Ticket'],['Reaperturas',1],['Técnico']],rr.map(t=>({c:[t[3],nf(t[1]),esc(t[2])]}))):'<p class="note">Este cliente no registra reaperturas en el corte.</p>';})()}]});},
   informe(i){i=+i;const r=DATA.informes.filas[i],I=DATA.informes;openInspector({kind:'Informes a clientes · '+r[0],title:'Nivel '+r[0],sub:'Informes de tickets a clientes · noviembre',key:'inf-'+i,
     pill:`<span class="pill ${r[6]<50?'p-bad':r[6]>=100?'p-good':'p-neu'}">${pc(r[6])} del mes</span>`,
     minis:[['Esperados',nf(r[1])],['Ejecutados',nf(r[2]),r[2]/r[1]*100],['Pendientes',nf(r[3])]],
     sections:[{h:kv([['Ejecutados mes anterior',nf(r[4])],['Total acumulados',nf(r[5])],['% efectividad del mes',pc(r[6])],['% efectividad total',pc(r[7],2)]])},
       {t:'Todos los niveles',h:tbl([['Nivel'],['Esperados',1],['Ejecutados',1],['Pendientes',1],['% mes',1]],I.filas.map((x,j)=>({c:[x[0],nf(x[1]),nf(x[2]),nf(x[3]),pc(x[6])],_go:'informe',_arg:j})),['Total',nf(I.esperados),nf(I.ejecutados),nf(I.faltantes),pc(I.pct)])}]});},
   mant(i){i=+i;const M=DATA.mantenimientos;const fut=i>=11,cur=i===NOV;
-    openInspector({kind:'Mantenimientos',title:M.largos[i]+' 2026',sub:fut?'Programados':cur?'Programados y ejecutados al corte del 10 nov':'Programados, ejecutados y pendientes',key:'man-'+i,
+    openInspector({kind:'Mantenimientos',title:M.largos[i]+' 2026',sub:fut?'Programados':cur?`Programados y ejecutados al corte del ${CORTE_DM}`:'Programados, ejecutados y pendientes',key:'man-'+i,
       pill:fut?'<span class="pill p-neu">Programado</span>':`<span class="pill ${M.efTot[i]<60?'p-bad':M.efTot[i]<85?'p-warn':'p-good'}">${pc(M.efTot[i])} efectividad total</span>`,
       minis:[['Real del mes',nf(M.real[i])],['Pendientes que venían',nf(M.pend[i])],['Total del mes',nf(M.total[i])],['Ejecutada acumulada',nf(M.acum[i]),M.total[i]?M.acum[i]/M.total[i]*100:0]],
       sections:[{t:'Todos los meses',h:tbl([['Mes'],['Real',1],['Pend.',1],['Total',1],['Ejec. real',1],['Ejec. pend.',1],['Acum.',1],['% real',1],['% total',1]],
@@ -792,30 +821,30 @@ const KPIS={
     sections:[{t:'Cierres por área en octubre',h:areaRowsTbl(DATA.areaOct)}]}),
   ratio:()=>({kind:'KPI · Ratio',title:`${pc(F.ratio[OCT])} de ratio de cierre en octubre`,sub:'Cerrados nuevos ÷ ingresados',key:'kpi-ratio',pill:cmp(F.ratio[OCT],F.ratio[SEP],false,'septiembre',' pp',1),
     sections:[{t:'Ratio por mes',h:tbl([['Mes'],['Ingresados',1],['Cerrados nuevos',1],['Ratio',1]],DATA.meses.map((m,i)=>({c:[mesTxt(i),nf(F.ingresados[i]),nf(F.cerradosNuevos[i]),pc(F.ratio[i])],_go:'mes',_arg:i})))}]}),
-  anio:()=>{const T=DATA.tarjetasAnio;return{kind:'KPI · Año 2026',title:'Ingresados y cerrados del año',sub:'Tarjetas del informe al 10 nov',key:'kpi-anio',
+  anio:()=>{const T=DATA.tarjetasAnio;return{kind:'KPI · Año 2026',title:'Ingresados y cerrados del año',sub:`Tarjetas del informe al ${CORTE_DM}`,key:'kpi-anio',
     minis:[['Total ingresados',nf(T.ingresados)],['Total cerrados',nf(T.cerrados)],['Total abiertos',nf(T.abiertos)],['% cerrados vs ingresados',pc(T.pct),T.pct],['Promedio atención',nf(T.atencionDias,1)+' días'],['Promedio por día',nf(T.promDia)]],
     sections:[{t:'Histórico por mes',h:tbl([['Mes'],['Ingresados',1],['Cerr. nuevos',1],['Cerr. antiguos',1],['Pendientes',1]],DATA.meses.map((m,i)=>({c:[mesTxt(i),nf(F.ingresados[i]),nf(F.cerradosNuevos[i]),nf(F.cerradosAntiguos[i]),nf(F.pendientes[i])],_go:'mes',_arg:i})))}]};},
   sla:()=>{const S=DATA.sla;return{kind:'KPI · Tiempos',title:'Tiempos de atención ANS',sub:'Tickets creados 2025 y cerrados 2026',key:'kpi-sla',
     minis:[['Octubre · promedio general',hf(S.general[OCT])],['Año · promedio general',hf(S.promedio)],['Cumplen ANS en el año',nf(S.cumple),S.cumplePct],['Prom. a tiempo / fuera',hf(S.promATiempo)+' / '+hf(S.promFuera)]],
     sections:[{t:'Promedio por mes (h)',h:tbl([['Mes'],['General',1],['A tiempo',1],['Fuera',1],['Nuevos a tiempo',1],['Nuevos fuera',1]],DATA.meses.map((m,i)=>({c:[mesTxt(i),nf(S.general[i],1),nf(S.aTiempo[i],1),nf(S.fueraT[i],1),nf(S.nuevosATiempo[i],1),nf(S.nuevosFuera[i],1)],_go:'mes',_arg:i})))},
       {t:'Por nivel de servicio',h:tbl([['Nivel'],['Cerrados',1],['A tiempo',1],['Fuera',1],['% ANS',1]],S.prioridad.map((x,j)=>({c:[x[0],nf(x[1]),nf(x[2]),nf(x[3]),pc(x[5])],_go:'prioridad',_arg:j})),['Total',nf(S.cerrados),nf(S.cumple),nf(S.fuera),pc(S.cumplePct)])}]};},
-  mas7:()=>{const K=DATA.abiertosKpi;return{kind:'KPI · Antigüedad',title:`${K.mas7dias} tickets con más de 7 días`,sub:`${pc(K.mas7dias/AB*100)} del backlog al 10 nov`,key:'kpi-mas7',
+  mas7:()=>{const K=DATA.abiertosKpi;return{kind:'KPI · Antigüedad',title:`${K.mas7dias} tickets con más de 7 días`,sub:`${pc(K.mas7dias/AB*100)} del backlog al ${CORTE_DM}`,key:'kpi-mas7',
     minis:[['Más de 7 días',nf(K.mas7dias),K.mas7dias/AB*100],['Antigüedad promedio',df(K.antiguedadDias)],['Creados antes de ago 2026',nf(sum(DATA.antiguedad.slice(0,6).map(r=>r[1])))]],
     sections:[{t:'Abiertos por mes de creación',h:tbl([['Mes de creación'],['Abiertos',1]],DATA.antiguedad.map((x,j)=>({c:[x[0],nf(x[1])],_go:'antig',_arg:j})),['Total',nf(AB)])},
       {t:'Tickets abiertos por cliente',h:tbl([['Cliente'],['Mes'],['Tickets',1],['Días',1]],DATA.abiertosCliente.map((r,i)=>({c:[esc(r[2]),r[1]+' '+r[0],nf(r[3]),nf(r[5])],_go:'abCli',_arg:i})),['Total','',nf(AB),nf(K.antiguedadDias)])}]};},
-  clientesAb:()=>{const K=DATA.abiertosKpi;return{kind:'KPI · Clientes',title:`${K.clientes} clientes con tickets abiertos`,sub:'100 % del total · corte 10 nov',key:'kpi-cli',
+  clientesAb:()=>{const K=DATA.abiertosKpi;return{kind:'KPI · Clientes',title:`${K.clientes} clientes con tickets abiertos`,sub:`100 % del total · corte ${CORTE_DM}`,key:'kpi-cli',
     sections:[{t:'Tickets abiertos por cliente',h:tbl([['Año'],['Mes'],['Cliente'],['Tickets',1],['% del mes',1],['Días',1],['Horas',1]],DATA.abiertosCliente.map((r,i)=>({c:[r[0],r[1],esc(r[2]),nf(r[3]),r[4],nf(r[5]),nf(r[6],1)],_go:'abCli',_arg:i})),['Total','','',nf(AB),'100 %',nf(K.antiguedadDias),nf(K.antiguedadHoras,1)])}]};},
-  reab:()=>{const R=DATA.reabiertos;return{kind:'KPI · Reaperturas',title:`${R.total} tickets reabiertos`,sub:`${R.cerradosSitio} tickets cerrados por técnicos en sitio`,key:'kpi-reab',pill:'<span class="pill p-good">Bajo nivel de reaperturas</span>',
+  reab:()=>{const R=DATA.reabiertos;return{kind:'KPI · Reaperturas',title:`${R.total} tickets reabiertos`,sub:`${R.cerradosSitio} tickets cerrados por técnicos en sitio`,key:'kpi-reab',pill:`<span class="pill ${R.total===0?'p-good':R.pct>=10?'p-warn':'p-neu'}">${R.total===0?'Sin reaperturas':`${pc(R.pct)} de los cierres en sitio`}</span>`,
     minis:[['Cerrados del año',nf(R.cerradosAnio)],['Cerrados por técnicos en sitio',nf(R.cerradosSitio)],['Tickets reabiertos',nf(R.total)],['Promedio de reaperturas',nf(R.promedio)]],
-    sections:[{t:'Detalle de reabiertos',h:'<p class="note">El informe no registra tickets reabiertos ni técnicos con reaperturas.</p>'}]};},
+    sections:[{t:'Reaperturas por técnico',h:R.tecnicos.length?tbl([['Técnico'],['Cerrados',1],['Reabiertos',1],['%',1]],R.tecnicos.map(t=>({c:[esc(t[0]),nf(t[1]),nf(t[2]),pc(t[3])]}))):'<p class="note">El informe no registra técnicos con reaperturas.</p>'},{t:'Tickets reabiertos',h:R.tickets.length?tbl([['Cliente'],['Reaperturas',1],['Técnico'],['Ticket',1]],R.tickets.map(t=>({c:[esc(t[0]),nf(t[1]),esc(t[2]),t[3]]}))):'<p class="note">El informe no registra tickets reabiertos.</p>'}]};},
   informes:()=>{const I=DATA.informes;return{kind:'Compromiso · Informes',title:`${I.ejecutados} de ${I.esperados} informes ejecutados`,sub:'Informes de tickets a clientes · noviembre',key:'kpi-inf',pill:`<span class="pill ${I.faltantes?'p-warn':'p-good'}">${pc(I.pct)} de efectividad</span>`,
     minis:[['Esperados',nf(I.esperados)],['Ejecutados',nf(I.ejecutados),I.pct],['Faltantes',nf(I.faltantes)]],
     sections:[{t:'Por nivel ANS',h:tbl([['Nivel'],['Esperados',1],['Ejecutados',1],['Pendientes',1],['% mes',1]],I.filas.map((r,i)=>({c:[r[0],nf(r[1]),nf(r[2]),nf(r[3]),pc(r[6])],_go:'informe',_arg:i})),['Total',nf(I.esperados),nf(I.ejecutados),nf(I.faltantes),pc(I.pct)])}]};},
-  mantAnio:()=>{const M=DATA.mantenimientos;return{kind:'Compromiso · Mantenimientos',title:`${M.ejecutadaAcum} de ${M.esperados} mantenimientos ejecutados`,sub:'Acumulado 2026 · corte 10 nov',key:'kpi-man',pill:`<span class="pill p-good">${pc(M.pct)} de efectividad general</span>`,
+  mantAnio:()=>{const M=DATA.mantenimientos;return{kind:'Compromiso · Mantenimientos',title:`${M.ejecutadaAcum} de ${M.esperados} mantenimientos ejecutados`,sub:`Acumulado 2026 · corte ${CORTE_DM}`,key:'kpi-man',pill:`<span class="pill p-good">${pc(M.pct)} de efectividad general</span>`,
     minis:[['Esperados',nf(M.esperados)],['Ejecutada acumulada',nf(M.ejecutadaAcum),M.pct],['Faltantes por ejecutar',nf(M.faltantes)]],
     sections:[{t:'Por mes',h:tbl([['Mes'],['Total',1],['Ejec. acum.',1],['% total',1]],M.meses.map((m,j)=>({c:[m,nf(M.total[j]),nf(M.acum[j]),pc(M.efTot[j])],_go:'mant',_arg:j})))}]};},
-  ansOct:()=>{const A=DATA.ansOct;return{kind:'KPI · ANS técnicos',title:`${pc(A.pctMes)} de cumplimiento en noviembre (al 10)`,sub:`${A.cumple} de ${A.cerradosTecnicos} cerrados por técnicos`,key:'kpi-ans',pill:`<span class="pill p-neu">Cumplimiento total: ${pc(A.pctTotal)}</span>`,
-    minis:[['Cerrados del mes (al 10)',nf(A.cerradosMes)],['Cerrados por técnicos',nf(A.cerradosTecnicos)],['Cumplen ANS',nf(A.cumple),A.pctMes],['% cumplimiento total',pc(A.pctTotal)]],
+  ansOct:()=>{const A=DATA.ansOct;return{kind:'KPI · ANS técnicos',title:`${pc(A.pctMes)} de cumplimiento en ${MES_AL}`,sub:`${A.cumple} de ${A.cerradosTecnicos} cerrados por técnicos`,key:'kpi-ans',pill:`<span class="pill p-neu">Cumplimiento total: ${pc(A.pctTotal)}</span>`,
+    minis:[[`Cerrados del mes (al ${CORTE_DIA})`,nf(A.cerradosMes)],['Cerrados por técnicos',nf(A.cerradosTecnicos)],['Cumplen ANS',nf(A.cumple),A.pctMes],['% cumplimiento total',pc(A.pctTotal)]],
     sections:[{t:`Por área de cierre (suma = ${A.cumple})`,h:tbl([['Área'],['Cumplen ANS',1],['%',1]],A.areaCierre.map(r=>({c:[aName(r[0]),nf(r[1]),pc(r[1]/A.cumple*100,2)],...ac(r)})),['Total',nf(A.cumple),'100,00 %'])},
       {t:'Por ingeniero',h:tbl([['Ingeniero'],['% efectividad',1]],A.ingenieros.map((r,i)=>({c:[r[0],pc(r[1])],_go:'ingeniero',_arg:i})))}]};}
 };
@@ -824,16 +853,16 @@ const KPIS={
    5. HALLAZGOS Y ALERTAS DE LA SEMANA
    ===================================================================== */
 const INSIGHTS=[
-  {t:`El backlog cerró la semana en ${LAST}, ${Math.abs(NET)} más que el corte anterior`,d:`Pasó de ${REF} (${WK[0].c}) a 97 el jueves 5; subió a ${PEAK} el ${WK[PEAKI].l}, bajó a 112 el domingo y lunes y quedó en ${LAST} al corte.`,p:'4 – 10 nov',go:()=>GO.dia(PEAKI)},
-  {t:`Noviembre lleva ${F.ingresados[NOV]} ingresados y ${F.cerradosTotal[NOV]} cerrados en 10 días`,d:`${F.cerradosNuevos[NOV]} cierres del mismo mes y ${F.cerradosAntiguos[NOV]} de meses previos; ${F.pendientes[NOV]} pendientes. Ratio de cierre ${pc(F.ratio[NOV])}.`,p:'Noviembre al 10',go:()=>GO.mes(NOV)},
+  {t:`El backlog cerró la semana en ${LAST}, ${Math.abs(NET)} más que el corte anterior`,d:`Pasó de ${REF} (${WK[0].c}) a 97 el jueves 5; subió a ${PEAK} el ${WK[PEAKI].l}, bajó a 112 el domingo y lunes y quedó en ${LAST} al corte.`,p:RANGO,go:()=>GO.dia(PEAKI)},
+  {t:`Noviembre lleva ${F.ingresados[NOV]} ingresados y ${F.cerradosTotal[NOV]} cerrados en ${CORTE_DIA} días`,d:`${F.cerradosNuevos[NOV]} cierres del mismo mes y ${F.cerradosAntiguos[NOV]} de meses previos; ${F.pendientes[NOV]} pendientes. Ratio de cierre ${pc(F.ratio[NOV])}.`,p:MES_AL_C,go:()=>GO.mes(NOV)},
   {t:'Octubre cerró con más cierres que ingresos',d:`Ingresaron ${OCTI} tickets y se cerraron ${OCTC}: ${OCTN} del mismo mes y ${OCTA} que venían de antes. Ratio de cierre ${pc(F.ratio[OCT])}.`,p:'Octubre',go:()=>GO.kpi('cerrOct')},
-  {t:'El tiempo de atención de octubre bajó a 28,0 h',d:'Es el promedio general de mes completo más bajo del año: 59,5 h en septiembre y 139,6 h en enero. Noviembre va en 8,9 h al corte.',p:'Ene–nov',go:()=>GO.kpi('sla')},
-  {t:'Sistemas nivel 1 sostiene la operación',d:'Recibió 85 de los 138 tickets de noviembre (61,6 %) y cerró 70 (82,4 %); en octubre, 262 de 501.',p:'Noviembre al 10',go:()=>GO.area('sis')}
+  {t:'El tiempo de atención de octubre bajó a 28,0 h',d:`Es el promedio general de mes completo más bajo del año: ${nf(DATA.sla.general[SEP],1)} h en septiembre y ${nf(DATA.sla.general[0],1)} h en enero. Noviembre va en ${nf(DATA.sla.general[NOV],1)} h al corte.`,p:'Ene–nov',go:()=>GO.kpi('sla')},
+  {t:'Sistemas nivel 1 sostiene la operación',d:`Recibió ${DATA.areaNov.sis[0]} de los ${F.ingresados[NOV]} tickets de noviembre (${pc(DATA.areaNov.sis[0]/F.ingresados[NOV]*100)}) y cerró ${DATA.areaNov.sis[1]} (${pc(DATA.areaNov.sis[1]/DATA.areaNov.sis[0]*100)}); en octubre, ${DATA.areaOct.sis[0]} de ${Object.values(DATA.areaOct).reduce((s,v)=>s+v[0],0)}.`,p:MES_AL_C,go:()=>GO.area('sis')}
 ];
 const ALERTS=[
   {t:`${DATA.abiertosKpi.mas7dias} tickets llevan más de 7 días abiertos`,d:`${pc(DATA.abiertosKpi.mas7dias/AB*100)} del backlog de ${AB}; antigüedad promedio de ${DATA.abiertosKpi.antiguedadDias} días. El backlog llegó a ${PEAK} el sábado 7.`,lvl:'bad',go:()=>GO.kpi('mas7')},
   {t:`Escalamientos externos: ${ESCN} tickets abiertos`,d:`Escalado a Spark 1 tiene ${DATA.abiertosArea.sp1[0]} abiertos, 0 cierres en octubre y 0 movimientos en noviembre; con Spark 2 (${DATA.abiertosArea.sp2[0]}) e IDI (${DATA.abiertosArea.idi[0]}) son ${pc(ESCN/AB*100)} del backlog.`,lvl:'warn',go:()=>GO.area('sp1')},
-  {t:'Mantenimientos de noviembre: 8 de 22',d:'36,4 % al corte del 10 nov; faltan 14 del mes. Año: 150 de 165 (90,9 %).',lvl:'warn',go:()=>GO.mant(NOV)},
+  {t:`Mantenimientos de noviembre: ${DATA.mantenimientos.acum[NOV]} de ${DATA.mantenimientos.total[NOV]}`,d:`${pc(DATA.mantenimientos.efTot[NOV])} al corte del ${CORTE_DM}; faltan ${DATA.mantenimientos.total[NOV]-DATA.mantenimientos.acum[NOV]} del mes. Año: ${nf(DATA.mantenimientos.ejecutadaAcum)} de ${nf(DATA.mantenimientos.esperados)} (${pc(DATA.mantenimientos.pct)}).`,lvl:DATA.mantenimientos.efTot[NOV]>=90?'good':'warn',go:()=>GO.mant(NOV)},
   {t:'Informes Diamante de noviembre: 9 de 11',d:'Faltan 2 por ejecutar (81,8 %); Oro completó sus 11. Total del mes: 20 de 22 (90,9 %).',lvl:'warn',go:()=>GO.informe(0)},
   {t:'Oro y Diamante cumplen el ANS en menos de 1 de cada 4',d:'En el año: Oro 24,1 % (241 de 998) y Diamante 22,2 % (10 de 45).',lvl:'warn',go:()=>GO.prioridad(1)}
 ];
@@ -871,18 +900,18 @@ function weekLine(id,h){const acc=cssv('--accent'),neu=cssv('--series-neutral');
 /* ---------- RESUMEN ---------- */
 function renderResumen(){const el=$('#v-resumen'),M=DATA.mantenimientos,I=DATA.informes;
   el.innerHTML=`<div class="grid">
-    ${kpiCard('abiertos','c4 hero','inbox','Tickets abiertos al corte',AB,0,'',`<span class="pill">${NET>0?'↑':'↓'} ${Math.abs(NET)} en la semana (${REF} → ${LAST})</span> ${DATA.abiertosKpi.clientes} clientes · corte 10 nov`)}
+    ${kpiCard('abiertos','c4 hero','inbox','Tickets abiertos al corte',AB,0,'',`<span class="pill">${NET>0?'↑':'↓'} ${Math.abs(NET)} en la semana (${REF} → ${LAST})</span> ${DATA.abiertosKpi.clientes} clientes · corte ${CORTE_DM}`)}
     ${kpiCard('pico','c4','alert','Pico de la semana',PEAK,0,'',`${WK[PEAKI].l} · al corte quedó en ${LAST}`)}
     ${kpiCard('cerrOct','c4','check','Cerrados en octubre',OCTC,0,'',`<span class="pill p-good">${OCTC-OCTI} más de los que entraron</span> ${OCTN} nuevos + ${OCTA} antiguos`)}
     ${kpiCard('ingOct','c4','flow','Ingresados en octubre',OCTI,0,'',cmp(OCTI,F.ingresados[SEP],true,'septiembre')+' 262 en sistemas nivel 1')}
-    ${kpiCard('nov','c4','calendar','Noviembre al 10',F.ingresados[NOV],0,'',`ingresados · ${F.cerradosTotal[NOV]} cerrados (${F.cerradosNuevos[NOV]} nuevos + ${F.cerradosAntiguos[NOV]} antiguos)`)}
+    ${kpiCard('nov','c4','calendar',MES_AL_C,F.ingresados[NOV],0,'',`ingresados · ${F.cerradosTotal[NOV]} cerrados (${F.cerradosNuevos[NOV]} nuevos + ${F.cerradosAntiguos[NOV]} antiguos)`)}
     ${kpiCard('sla','c4','timer','Atención promedio ANS · oct',DATA.sla.general[OCT],1,'',cmp(DATA.sla.general[OCT],DATA.sla.general[SEP],true,'septiembre',' h',1)+' fuera de tiempo 61,3 h','h')}
     ${card('c8',ctitle(`El backlog cerró la semana en ${LAST}, ${Math.abs(NET)} más que el ${WK[0].c}`,'Tickets abiertos: corte anterior y consolidado diario de noviembre · clic en un punto')+weekBoxes()+`<div class="chart" style="height:340px;margin-top:14px"><canvas id="chResDia" role="img" aria-label="Línea de tickets abiertos en la semana"></canvas></div>`)}
     ${card('c4',ctitle('Alertas de la semana','Clic para ver el detalle')+`<div class="list">${ALERTS.map((a,i)=>`<button class="alert ${a.lvl==='warn'?'w':''} ${i===0?'big':''}" data-alert="${i}">${ic('alert')}<div><b>${a.t}</b><span>${a.d}</span></div></button>`).join('')}</div>`)}
     ${card('c6',ctitle(`Sistemas nivel 1 recibió 262 de los ${OCTI} tickets de octubre`,'% de efectividad por área (cerrados ÷ ingresados) · octubre completo · clic para el área')+`<div class="legend"><span><i style="background:var(--accent)"></i>Cerrados</span><span><i class="sw-tint"></i>Sin cerrar</span></div><div class="arank" id="resArea"></div>`)}
     ${card('c6',ctitle('Lo más importante de la semana','Clic para ver el dato que lo respalda')+`<div class="list">${INSIGHTS.map((s,i)=>`<button class="ins" data-ins="${i}"><span class="no">${i+1}</span><div><b>${s.t}</b><span>${s.d}</span><div class="meta"><span class="pill p-neu">${s.p}</span></div></div></button>`).join('')}</div>`)}
     ${card('c6 hov',ctitle(`Informes a clientes: ${I.ejecutados} de ${I.esperados}`,`Noviembre · ${I.filas.map(r=>r[0]+' '+r[2]+'/'+r[1]).join(' · ')}`,true)+`<div class="ring-wrap">${ring(I.pct,'inf','ejecutados')}<div class="rleg"><span><i style="background:var(--accent)"></i>Ejecutados: ${I.ejecutados}</span><span><i class="sw-tint"></i>Faltantes: ${I.faltantes}</span></div></div>`,'data-kpi2="informes" data-key="kpi-inf"')}
-    ${card('c6 hov',ctitle(`Mantenimientos de noviembre: ${M.acum[NOV]} de ${M.total[NOV]}`,'Avance al corte del 10 nov',true)+`<div class="ring-wrap">${ring(M.efTot[NOV],'man','efectividad')}<div class="rleg"><span><i style="background:var(--accent)"></i>Ejecutado real: ${M.realEj[NOV]} de ${M.real[NOV]}</span><span><i style="background:var(--accent-soft)"></i>Ejecutado de pendientes: ${M.ejPend[NOV]} de ${M.pend[NOV]}</span><span class="muted">Octubre: 20 de 20 (100 %) · Año: ${M.ejecutadaAcum} de ${M.esperados} (${pc(M.pct)})</span></div></div>`,`data-kpi2="mant:${NOV}" data-key="man-${NOV}"`)}
+    ${card('c6 hov',ctitle(`Mantenimientos de noviembre: ${M.acum[NOV]} de ${M.total[NOV]}`,`Avance al corte del ${CORTE_DM}`,true)+`<div class="ring-wrap">${ring(M.efTot[NOV],'man','efectividad')}<div class="rleg"><span><i style="background:var(--accent)"></i>Ejecutado real: ${M.realEj[NOV]} de ${M.real[NOV]}</span><span><i style="background:var(--accent-soft)"></i>Ejecutado de pendientes: ${M.ejPend[NOV]} de ${M.pend[NOV]}</span><span class="muted">Octubre: 20 de 20 (100 %) · Año: ${M.ejecutadaAcum} de ${M.esperados} (${pc(M.pct)})</span></div></div>`,`data-kpi2="mant:${NOV}" data-key="man-${NOV}"`)}
   </div>`;
   wireKpis(el);wireCards(el);
   $$('[data-dia]',el).forEach(b=>b.addEventListener('click',()=>GO.dia(+b.dataset.dia)));
@@ -924,36 +953,36 @@ function renderFlujo(){const el=$('#v-flujo');
     options:baseOpts({layout:{padding:{top:20,right:26}},interaction:{mode:'index',intersect:false},scales:{y:{beginAtZero:false,min:65,max:95,ticks:{callback:v=>v+' %'}}},plugins:{valueLabels:{on:true,only:[0],fmt:(v,j)=>[6,7,8,9,10].includes(j)?nf(v,1):''}},onClick:onPick(j=>GO.mes(j))})});
   renderFlujoArea();}
 function renderFlujoArea(){const oct=STATE.areaPer!=='nov',src=oct?DATA.areaOct:DATA.areaNov,T=tot(src);
-  $('#areaChips').innerHTML=`<button class="chip sm" data-ap="oct" aria-pressed="${oct}">Octubre</button><button class="chip sm" data-ap="nov" aria-pressed="${!oct}">Noviembre (al 10)</button>`;
+  $('#areaChips').innerHTML=`<button class="chip sm" data-ap="oct" aria-pressed="${oct}">Octubre</button><button class="chip sm" data-ap="nov" aria-pressed="${!oct}">${MES_AL_C}</button>`;
   $$('#areaChips .chip').forEach(b=>b.addEventListener('click',()=>{STATE.areaPer=b.dataset.ap;renderFlujoArea();}));
   const rows=Object.entries(src).map(([k,v])=>({k,n:DATA.areas[k].n,ing:v[0],cer:v[1],pend:v[0]-v[1],ef:v[0]?v[1]/v[0]*100:null,pi:v[0]/T.ing*100,dia:v[2],at:v[3]}));
   const pend=rows.filter(r=>r.pend>0).sort((a,b)=>b.pend-a.pend);
-  $('#areaHead').innerHTML=ctitle(`${pend[0].n} dejó ${pend[0].pend} tickets sin cerrar en ${oct?'octubre':'noviembre (al 10)'}`,'Ingresados − cerrados por área · clic para el área');
+  $('#areaHead').innerHTML=ctitle(`${pend[0].n} dejó ${pend[0].pend} tickets sin cerrar en ${oct?'octubre':`${MES_AL}`}`,'Ingresados − cerrados por área · clic para el área');
   const neu=cssv('--series-neutral'),acc=cssv('--accent');
   mkChart('chAreaPend',{type:'bar',data:{labels:pend.map(r=>r.n),datasets:[{label:'Sin cerrar',data:pend.map(r=>r.pend),backgroundColor:pend.map((r,i)=>i===0?acc:neu),borderRadius:{topRight:5,bottomRight:5},borderSkipped:'start',maxBarThickness:16}]},
     options:baseOpts({indexAxis:'y',layout:{padding:{right:26}},scales:{x:{display:false},y:{grid:{display:false},ticks:{font:{size:11}}}},plugins:{valueLabels:{on:true}},onClick:onPick(i=>GO.area(pend[i].k))})});
   const cols=[{k:'n',l:'Área'},{k:'ing',l:'Ingresados',n:1},{k:'pi',l:'% ingresos',n:1,f:v=>pc(v)},{k:'cer',l:'Cerrados',n:1},{k:'pend',l:'Sin cerrar',n:1},{k:'ef',l:'% efectividad',n:1,f:v=>v==null?'<span class="muted">Sin ingresos</span>':`<span class="cellbar">${pc(v)}<span class="b"><i style="width:${v}%"></i></span></span>`}];
   if(!oct)cols.push({k:'dia',l:'Prom. ingresados/día',n:1},{k:'at',l:'Atención (días)',n:1,f:(v,r)=>r.cer===0?'<span class="muted">Sin cierres</span>':nf(v,1)});
-  dataTable($('#flujoTabla'),{title:`Descripción por área · ${oct?'octubre':'noviembre (al 10)'}`,sub:`${nf(T.ing)} ingresados · ${nf(T.cer)} cerrados · ${pc(T.cer/T.ing*100)} · las ${rows.length} áreas · clic para el detalle`,cols,rows,key:r=>'area-'+r.k,onRow:r=>GO.area(r.k),sort:'ing',
+  dataTable($('#flujoTabla'),{title:`Descripción por área · ${oct?'octubre':`${MES_AL}`}`,sub:`${nf(T.ing)} ingresados · ${nf(T.cer)} cerrados · ${pc(T.cer/T.ing*100)} · las ${rows.length} áreas · clic para el detalle`,cols,rows,key:r=>'area-'+r.k,onRow:r=>GO.area(r.k),sort:'ing',
     foot:{n:'Total',ing:nf(T.ing),pi:'100,0 %',cer:nf(T.cer),pend:nf(T.ing-T.cer),ef:pc(T.cer/T.ing*100),dia:oct?'':'15',at:oct?'':'0,8'}});}
 
 /* ---------- BACKLOG ---------- */
 function renderBacklog(){const el=$('#v-backlog'),K=DATA.abiertosKpi;
   el.innerHTML=`<div class="grid">
-    ${kpiCard('abiertos','c3 hero','inbox','Tickets abiertos',AB,0,'',`${NET>0?'↑':'↓'} ${Math.abs(NET)} en la semana · corte 10 nov`)}
+    ${kpiCard('abiertos','c3 hero','inbox','Tickets abiertos',AB,0,'',`${NET>0?'↑':'↓'} ${Math.abs(NET)} en la semana · corte ${CORTE_DM}`)}
     ${kpiCard('clientesAb','c3','users','Clientes con tickets abiertos',K.clientes,0,'','100 % del total')}
     ${kpiCard('mas7','c3','timer','Antigüedad promedio',K.antiguedadDias,0,'',`Promedio abierto · ${nf(K.antiguedadHoras,1)} h`,'días')}
     ${kpiCard('mas7','c3','alert','Con más de 7 días',K.mas7dias,0,'',`<span class="pill p-bad">${pc(K.mas7dias/AB*100)} del backlog</span>`)}
     ${card('c8',ctitle(`En la semana el backlog pasó de ${REF} a ${LAST}`,'Corte anterior y consolidado diario de noviembre · clic en un punto')+weekBoxes()+`<div class="chart" style="height:300px;margin-top:14px"><canvas id="chDiario" role="img" aria-label="Línea de abiertos en la semana"></canvas></div>`)}
-    ${card('c4',ctitle(`Noviembre va en ${DATA.abiertosFinMes[NOV]}, el nivel más alto del año`,'Abiertos al cierre de cada mes · noviembre = corte 10 nov')+`<div class="chart" style="height:420px"><canvas id="chFinMes" role="img" aria-label="Línea de abiertos al cierre de cada mes"></canvas></div>`)}
-    ${card('c6',ctitle(`${ESCN} de los ${AB} abiertos esperan a un tercero`,'Abiertos por área al 10 nov · rayado: creados en 2025 · clic para el área')+`<div class="legend"><span><i style="background:var(--accent)"></i>Escalamiento externo</span><span><i style="background:var(--series-neutral)"></i>Área interna</span><span><i class="sw-stripe"></i>Creados en 2025</span></div><div class="chart" style="height:360px"><canvas id="chBkArea" role="img" aria-label="Barras de abiertos por área"></canvas></div>`)}
+    ${card('c4',ctitle(`Noviembre va en ${DATA.abiertosFinMes[NOV]}, el nivel más alto del año`,`Abiertos al cierre de cada mes · noviembre = corte ${CORTE_DM}`)+`<div class="chart" style="height:420px"><canvas id="chFinMes" role="img" aria-label="Línea de abiertos al cierre de cada mes"></canvas></div>`)}
+    ${card('c6',ctitle(`${ESCN} de los ${AB} abiertos esperan a un tercero`,`Abiertos por área al ${CORTE_DM} · rayado: creados en 2025 · clic para el área`)+`<div class="legend"><span><i style="background:var(--accent)"></i>Escalamiento externo</span><span><i style="background:var(--series-neutral)"></i>Área interna</span><span><i class="sw-stripe"></i>Creados en 2025</span></div><div class="chart" style="height:360px"><canvas id="chBkArea" role="img" aria-label="Barras de abiertos por área"></canvas></div>`)}
     ${card('c6',ctitle(`${DATA.antiguedad.find(r=>r[0]==='nov 2026')[1]} de los ${AB} abiertos se crearon en noviembre`,'Abiertos al corte según el mes de creación · clic para el detalle')+`<div class="chart" style="height:360px"><canvas id="chAntig" role="img" aria-label="Barras de abiertos por mes de creación"></canvas></div>`)}
     <article class="card c12" id="bkClientes"></article>
   </div>`;
   wireKpis(el);$$('[data-dia]',el).forEach(b=>b.addEventListener('click',()=>GO.dia(+b.dataset.dia)));
   weekLine('chDiario',300);
   const neu=cssv('--series-neutral'),acc=cssv('--accent');
-  mkChart('chFinMes',{type:'line',data:{labels:DATA.meses.map((m,j)=>j===NOV?'10 nov':m),datasets:[{label:'Abiertos',data:DATA.abiertosFinMes,borderColor:acc,backgroundColor:acc,pointRadius:DATA.abiertosFinMes.map((_,i)=>i>=OCT?7:4),segment:{borderDash:c=>c.p1DataIndex===NOV?[5,4]:undefined}}]},
+  mkChart('chFinMes',{type:'line',data:{labels:DATA.meses.map((m,j)=>j===NOV?CORTE_DM:m),datasets:[{label:'Abiertos',data:DATA.abiertosFinMes,borderColor:acc,backgroundColor:acc,pointRadius:DATA.abiertosFinMes.map((_,i)=>i>=OCT?7:4),segment:{borderDash:c=>c.p1DataIndex===NOV?[5,4]:undefined}}]},
     options:baseOpts({interaction:{mode:'index',intersect:false},scales:{y:{beginAtZero:false,min:70}},plugins:{valueLabels:{on:true,fmt:(v,i)=>[0,6,7,8,9,10].includes(i)?nf(v):''}},onClick:onPick(i=>GO.finMes(i))})});
   const ent=Object.entries(DATA.abiertosArea).sort((a,b)=>b[1][0]-a[1][0]);
   mkChart('chBkArea',{type:'bar',data:{labels:ent.map(([k])=>DATA.areas[k].n),datasets:[
@@ -965,7 +994,7 @@ function renderBacklog(){const el=$('#v-backlog'),K=DATA.abiertosKpi;
   mkChart('chAntig',{type:'bar',data:{labels:DATA.antiguedad.map(r=>r[0]),datasets:[{label:'Abiertos',data:DATA.antiguedad.map(r=>r[1]),backgroundColor:DATA.antiguedad.map((r,i)=>i===ai?acc:neu),borderRadius:{topRight:5,bottomRight:5},borderSkipped:'start',maxBarThickness:20}]},
     options:baseOpts({indexAxis:'y',layout:{padding:{right:30}},scales:{x:{display:false},y:{grid:{display:false}}},plugins:{valueLabels:{on:true}},onClick:onPick(i=>GO.antig(i))})});
   const rows=DATA.abiertosCliente.map((r,i)=>({i,anio:r[0],mes:r[1],cli:r[2],n:r[3],pct:r[4],dias:r[5],horas:r[6]}));
-  dataTable($('#bkClientes'),{title:'Tickets abiertos por cliente',sub:'Corte 10 nov · filas visibles en el informe · clic para el detalle',
+  dataTable($('#bkClientes'),{title:'Tickets abiertos por cliente',sub:`Corte ${CORTE_DM} · filas visibles en el informe · clic para el detalle`,
     cols:[{k:'anio',l:'Año',f:v=>v},{k:'mes',l:'Mes de creación'},{k:'cli',l:'Cliente'},{k:'n',l:'Tickets',n:1},{k:'pct',l:'% del mes',n:1},{k:'dias',l:'Antigüedad (días)',n:1,f:v=>nf(v)},{k:'horas',l:'Antigüedad (h)',n:1,f:v=>nf(v,1)}],
     rows,key:r=>'abc-'+r.i,onRow:r=>GO.abCli(r.i),sort:'dias',foot:{anio:'Total',n:nf(AB),pct:'100 %',dias:nf(K.antiguedadDias),horas:nf(K.antiguedadHoras,1)}});}
 
@@ -982,9 +1011,9 @@ function renderAns(){const el=$('#v-ans'),S=DATA.sla,A=DATA.ansOct,R=DATA.reabie
     ${card('c4',ctitle('Oro y Diamante cumplen el ANS en menos de 1 de cada 4','% de cumplimiento por nivel · acumulado del año')+S.prioridad.map((r,i)=>`<div class="brow" data-pri="${i}" data-key="pri-${i}"><div class="nm">${r[0].replace('Nivel ','')}<small>${nf(r[1])} cerrados · ${nf(r[4],1)} h</small></div><div class="prog"><i data-w="${r[5]}"></i></div><div class="v">${pc(r[5])}</div></div>`).join('')+
       `<div class="mini" style="margin-top:12px"><span>Año: cumplen ANS</span><b>${pc(S.cumplePct)}</b> <span style="display:inline">· ${nf(S.cumple)} de ${nf(S.cerrados)} · a tiempo ${hf(S.promATiempo)} · fuera ${hf(S.promFuera)}</span></div>`)}
     ${card('c6',ctitle('Flypass promedia 731,8 h por ticket; Bogotá, 76,9 h','Promedio general ANS por área (h) · acumulado del año · clic para el área')+`<div class="legend"><span><i style="background:var(--series-neutral)"></i>Promedio general</span><span><i style="background:var(--accent)"></i>Promedio a tiempo</span></div><div class="chart" style="height:440px"><canvas id="chSlaArea" role="img" aria-label="Barras de horas promedio ANS por área"></canvas></div>`)}
-    ${card('c6',ctitle(`${A.ingenieros[0][0]} lidera noviembre con ${pc(A.ingenieros[0][1])}`,'% efectividad SLA por ingeniero · noviembre (al 10)')+`<div class="chart" style="height:250px"><canvas id="chIng" role="img" aria-label="Barras de cumplimiento por ingeniero"></canvas></div>
-      <h3 style="font-size:13px;margin:14px 0 8px">Sistemas nivel 1 aporta ${pc(A.areaCierre[0][1]/A.cumple*100)} de los cierres dentro del ANS</h3><div class="stack100" id="cierreBar"></div><p class="muted" style="font-size:12px;margin:6px 0 0">${A.cumple} tickets cerrados dentro del ANS en noviembre (al 10), por área de cierre</p>`)}
-    ${card('c12 hov',ctitle(`Técnicos en sitio: ${R.total} reaperturas sobre ${R.cerradosSitio} cierres`,'Informe general de tickets reabiertos · clic para el detalle',true)+`<div class="minis"><div class="mini"><span>Cerrados del año</span><b>${nf(R.cerradosAnio)}</b></div><div class="mini"><span>Cerrados por técnicos en sitio</span><b>${nf(R.cerradosSitio)}</b></div><div class="mini"><span>Tickets reabiertos</span><b>${nf(R.total)}</b></div><div class="mini"><span>Promedio de reaperturas</span><b>${nf(R.promedio)}</b></div></div><p class="note" style="margin:12px 0 0">Bajo nivel de reaperturas: el informe no registra tickets reabiertos ni técnicos con reaperturas.</p>`,'data-kpi2="reab" data-key="kpi-reab"')}
+    ${card('c6',ctitle(`${A.ingenieros[0][0]} lidera noviembre con ${pc(A.ingenieros[0][1])}`,`% efectividad SLA por ingeniero · ${MES_AL}`)+`<div class="chart" style="height:250px"><canvas id="chIng" role="img" aria-label="Barras de cumplimiento por ingeniero"></canvas></div>
+      <h3 style="font-size:13px;margin:14px 0 8px">Sistemas nivel 1 aporta ${pc(A.areaCierre[0][1]/A.cumple*100)} de los cierres dentro del ANS</h3><div class="stack100" id="cierreBar"></div><p class="muted" style="font-size:12px;margin:6px 0 0">${A.cumple} tickets cerrados dentro del ANS en ${MES_AL}, por área de cierre</p>`)}
+    ${card('c12 hov',ctitle(`Técnicos en sitio: ${R.total} reaperturas sobre ${R.cerradosSitio} cierres`,'Informe general de tickets reabiertos · clic para el detalle',true)+`<div class="minis"><div class="mini"><span>Cerrados del año</span><b>${nf(R.cerradosAnio)}</b></div><div class="mini"><span>Cerrados por técnicos en sitio</span><b>${nf(R.cerradosSitio)}</b></div><div class="mini"><span>Tickets reabiertos</span><b>${nf(R.total)}</b></div><div class="mini"><span>Promedio de reaperturas</span><b>${nf(R.promedio)}</b></div></div><p class="note" style="margin:12px 0 0">${R.total===0?'El informe no registra tickets reabiertos ni técnicos con reaperturas.':`${R.total} de los ${R.cerradosSitio} cierres en sitio se reabrieron (${pc(R.pct)}), con ${R.tecnicos.length} técnicos involucrados.`}</p>`,'data-kpi2="reab" data-key="kpi-reab"')}
   </div>`;
   wireKpis(el);wireCards(el);
   $$('[data-sla]',el).forEach(b=>b.addEventListener('click',()=>{STATE.slaModo=b.dataset.sla;$$('[data-sla]',el).forEach(x=>x.setAttribute('aria-pressed',x===b));drawSla();}));
@@ -1013,9 +1042,9 @@ function drawSla(){const neu=cssv('--series-neutral'),acc=cssv('--accent'),ink=c
 /* ---------- CLIENTES ---------- */
 function renderClientes(){const el=$('#v-clientes'),C=DATA.clientes,ti=sum(C.map(c=>c.ing)),tc=sum(C.map(c=>c.cer));
   el.innerHTML=`<div class="grid">
-    ${card('c12',`<div class="tbl-tools"><div><h2 style="margin:0;font-size:16px">Top 10 de clientes · noviembre (al 10)</h2><p class="muted" style="margin:3px 0 0;font-size:12.5px">${ti} tickets ingresados (${pc(ti/F.ingresados[NOV]*100)} del mes) · ${tc} cerrados</p></div><input class="tbl-search" id="cliQ" type="search" placeholder="Filtrar clientes" aria-label="Filtrar clientes"></div><div class="chips" id="cliChips" style="margin-bottom:14px"><button class="chip sm" data-f="all" aria-pressed="true">Todos <span class="n">10</span></button><button class="chip sm" data-f="pend" aria-pressed="false">Con tickets sin cerrar <span class="n">${C.filter(c=>c.ing-c.cer>=1).length}</span></button></div><div class="gallery" id="cliGallery"></div>`)}
-    ${card('c6',ctitle(`Citymovil lidera noviembre con ${C[0].ing} tickets; Indigo-Aeropuerto suma ${C[1].ing}`,'Ingresados vs cerrados en noviembre (al 10) · clic para el cliente')+`<div class="legend"><span><i style="background:var(--series-neutral)"></i>Ingresados</span><span><i style="background:var(--accent)"></i>Cerrados</span></div><div class="chart" style="height:420px"><canvas id="chCli" role="img" aria-label="Barras de ingresados y cerrados por cliente"></canvas></div>`)}
-    ${card('c6',ctitle('Ciudad del Rio genera más tickets por cada entrada','Tickets de noviembre (al 10) por cada 10.000 movimientos de entrada · Citymovil sin movimientos registrados')+`<div class="chart" style="height:420px"><canvas id="chCliRate" role="img" aria-label="Barras de tickets por 10.000 entradas"></canvas></div>`)}
+    ${card('c12',`<div class="tbl-tools"><div><h2 style="margin:0;font-size:16px">Top 10 de clientes · ${MES_AL}</h2><p class="muted" style="margin:3px 0 0;font-size:12.5px">${ti} tickets ingresados (${pc(ti/F.ingresados[NOV]*100)} del mes) · ${tc} cerrados</p></div><input class="tbl-search" id="cliQ" type="search" placeholder="Filtrar clientes" aria-label="Filtrar clientes"></div><div class="chips" id="cliChips" style="margin-bottom:14px"><button class="chip sm" data-f="all" aria-pressed="true">Todos <span class="n">10</span></button><button class="chip sm" data-f="pend" aria-pressed="false">Con tickets sin cerrar <span class="n">${C.filter(c=>c.ing-c.cer>=1).length}</span></button></div><div class="gallery" id="cliGallery"></div>`)}
+    ${card('c6',ctitle(`Citymovil lidera noviembre con ${C[0].ing} tickets; Indigo-Aeropuerto suma ${C[1].ing}`,`Ingresados vs cerrados en ${MES_AL} · clic para el cliente`)+`<div class="legend"><span><i style="background:var(--series-neutral)"></i>Ingresados</span><span><i style="background:var(--accent)"></i>Cerrados</span></div><div class="chart" style="height:420px"><canvas id="chCli" role="img" aria-label="Barras de ingresados y cerrados por cliente"></canvas></div>`)}
+    ${card('c6',ctitle('Ciudad del Rio genera más tickets por cada entrada',`Tickets de ${MES_AL} por cada 10.000 movimientos de entrada · Citymovil sin movimientos registrados`)+`<div class="chart" style="height:420px"><canvas id="chCliRate" role="img" aria-label="Barras de tickets por 10.000 entradas"></canvas></div>`)}
     <article class="card c12" id="cliTabla"></article>
   </div>`;
   let filt='all';
@@ -1031,7 +1060,7 @@ function renderClientes(){const el=$('#v-clientes'),C=DATA.clientes,ti=sum(C.map
   const rated=C.filter(c=>c.ent).map(c=>({...c,r:c.ing/c.ent*10000})).sort((a,b)=>b.r-a.r);
   mkChart('chCliRate',{type:'bar',data:{labels:rated.map(c=>c.n),datasets:[{label:'Tickets por 10.000 entradas',data:rated.map(c=>+c.r.toFixed(1)),backgroundColor:rated.map((c,i)=>i===0?acc:neu),borderRadius:{topRight:5,bottomRight:5},borderSkipped:'start',maxBarThickness:20,_dec:1}]},
     options:baseOpts({indexAxis:'y',layout:{padding:{right:34}},scales:{x:{display:false},y:{grid:{display:false},ticks:{font:{size:11}}}},plugins:{valueLabels:{on:true,fmt:v=>nf(v,1)}},onClick:onPick(i=>GO.cliente(rated[i].k))})});
-  dataTable($('#cliTabla'),{title:'Detalle de clientes',sub:'Las 10 filas del informe · noviembre (al 10) · clic para el detalle',cols:[{k:'n',l:'Cliente'},{k:'ing',l:'Ingresados',n:1},{k:'cer',l:'Cerrados',n:1},{k:'sc',l:'Sin cerrar',n:1},{k:'pct',l:'% cerrado',n:1,f:v=>pc(v)},{k:'ent',l:'Mov. de entrada',n:1},{k:'r',l:'Tickets / 10.000 ent.',n:1,f:v=>v==null?'<span class="muted">Sin movimientos</span>':nf(v,1)}],
+  dataTable($('#cliTabla'),{title:'Detalle de clientes',sub:`Las 10 filas del informe · ${MES_AL} · clic para el detalle`,cols:[{k:'n',l:'Cliente'},{k:'ing',l:'Ingresados',n:1},{k:'cer',l:'Cerrados',n:1},{k:'sc',l:'Sin cerrar',n:1},{k:'pct',l:'% cerrado',n:1,f:v=>pc(v)},{k:'ent',l:'Mov. de entrada',n:1},{k:'r',l:'Tickets / 10.000 ent.',n:1,f:v=>v==null?'<span class="muted">Sin movimientos</span>':nf(v,1)}],
     rows:C.map(c=>({...c,sc:c.ing-c.cer,pct:c.cer/c.ing*100,r:c.ent?c.ing/c.ent*10000:null})),key:r=>'cli-'+r.k,onRow:r=>GO.cliente(r.k),sort:'ing',foot:{n:'Total top 10',ing:nf(ti),cer:nf(tc),sc:nf(ti-tc),pct:pc(tc/ti*100),ent:nf(sum(C.map(c=>c.ent)))}});}
 
 /* ---------- COMPROMISOS ---------- */
