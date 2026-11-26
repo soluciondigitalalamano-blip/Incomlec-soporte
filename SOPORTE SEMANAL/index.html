@@ -489,26 +489,30 @@ tfoot td{font-weight:800;border-bottom:0;border-top:2px solid var(--line)}
 </script>
 <script>
 /* =====================================================================
-   1. DATOS — transcritos del «18112026 INFORME SOPORTE» (Power BI)
-      Semana del 12 al 18 de noviembre de 2026 (corte 18 nov · 07:00).
+   1. DATOS — transcritos del «25112026 INFORME SOPORTE» (Power BI)
+      Semana del 19 al 25 de noviembre de 2026 (corte 25 nov · 07:00).
       Octubre con cierre de mes completo; noviembre al corte.
 
       Para otra semana se actualiza SOLO este bloque: los textos de la
       página (encabezado, pie, insights, títulos) se derivan de
       DATA.semana y de los propios valores. No escribas la fecha a mano.
 
+      Paso 2 (validación página por página): las nueve páginas de este
+      export traen Max Fecha Datos / segmentador del corte nuevo. La
+      página «INFORME TICKETS ABIERTOS» viene al día (25/11/2026 07:…),
+      así que corteAbiertos vuelve a ser igual a corte.
+
       Secciones que este export NO trajo y conservan el corte anterior:
-      · semana.dias — el export del 18 nov no incluye «CONSOLIDADO DIARIOS».
-      · abiertosKpi, abiertosFinMes, abiertosArea, antiguedad y
-        abiertosCliente — la página «INFORME TICKETS ABIERTOS» venía
-        congelada con Max Fecha Datos = 10/11/2026.
+      · semana.dias — el export del 25 nov tampoco incluye la página
+        «TICKETS TOTAL ABIERTOS POR NIVEL · CONSOLIDADO DIARIOS»,
+        así que el consolidado diario sigue siendo el de 4 – 10 nov.
    ===================================================================== */
 const DATA = {
-  semana:{label:'Semana 12 – 18 nov 2026',corte:'18 nov 2026',hora:'07:00',
-    // La página «INFORME TICKETS ABIERTOS» del export venía congelada: su corte es anterior.
-    corteAbiertos:'10 nov 2026',
-    // Consolidado diario: el export del 18 nov NO trae la página «CONSOLIDADO DIARIOS»,
-    // así que estos valores siguen siendo los del corte anterior (4 – 10 nov).
+  semana:{label:'Semana 19 – 25 nov 2026',corte:'25 nov 2026',hora:'07:00',
+    // La página «INFORME TICKETS ABIERTOS» viene al corte: corteAbiertos = corte.
+    corteAbiertos:'25 nov 2026',
+    // Consolidado diario: el export del 25 nov NO trae la página «CONSOLIDADO DIARIOS»,
+    // así que estos valores siguen siendo los del corte del 10 nov (4 – 10 nov).
     dias:[
       {c:'4 nov',l:'miércoles 4 de noviembre',v:102,nota:'Corte del informe anterior'},
       {c:'5 nov',l:'jueves 5 de noviembre',v:97,nota:'Consolidado diario'},
@@ -518,77 +522,81 @@ const DATA = {
       {c:'9 nov',l:'lunes 9 de noviembre',v:112,nota:'Consolidado diario'},
       {c:'10 nov',l:'martes 10 de noviembre',v:113,nota:'Último dato diario disponible'}]},
   meses:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov'],
-  mesesLargos:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre (al 18)'],
+  mesesLargos:['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre (al 25)'],
   flujo:{ // «Histórico por mes de Ingresados y Cerrados 2026» + «Ratio Operativo por Mes»
-    ingresados:[312,306,393,339,352,299,337,380,472,501,278],
-    cerradosNuevos:[248,251,323,281,298,234,295,297,411,437,214],
-    cerradosTotal:[304,335,410,385,369,308,341,358,494,521,273],
-    pendientes:[64,55,70,58,54,65,42,83,61,64,64],
-    ratio:[79.5,82.0,82.2,82.9,84.7,78.3,87.5,78.2,87.1,87.2,77.0]
+    ingresados:[312,306,393,339,352,299,337,380,472,501,387],
+    cerradosNuevos:[248,251,323,281,298,234,295,297,411,437,314],
+    cerradosTotal:[304,335,410,385,369,308,341,358,494,521,383],
+    pendientes:[64,55,70,58,54,65,42,83,61,64,73],
+    ratio:[79.5,82.0,82.2,82.9,84.7,78.3,87.5,78.2,87.1,87.2,81.1]
   },
-  tarjetasAnio:{ingresados:3956,cerrados:3849,abiertos:107,pct:97.3,atencionDias:2.4,promDia:12},
+  tarjetasAnio:{ingresados:4040,cerrados:3928,abiertos:112,pct:97.2,atencionDias:2.4,promDia:12},
   areas:{
     sis:{n:'Área sistemas nivel 1',s:'SIS'}, sn2:{n:'Área sistemas nivel 2',s:'SN2'}, bog:{n:'Área técnica Bogotá',s:'BOG'}, med:{n:'Área técnica Medellín',s:'MED'},
     com:{n:'Área Comercial',s:'COM'}, esp:{n:'En espera de respuesta del cliente',s:'ESP'}, pfe:{n:'Parqueoo F.E.',s:'PFE'},
     idi:{n:'Escalado a IDI',s:'IDI'}, sp2:{n:'Escalado a Spark 2',s:'SP2'}, sp1:{n:'Escalado a Spark 1',s:'SP1'},
     cpr:{n:'Compras',s:'CPR'}, lab:{n:'Laboratorio',s:'LAB'}, fab:{n:'Escalado a Fábrica',s:'FAB'}, gar:{n:'Garantía',s:'GAR'},
-    fly:{n:'Flypass',s:'FLY'}, app:{n:'Parqueoo convenios App',s:'APP'}, caj:{n:'Parqueoo Autogestión cajeros',s:'CAJ'}
+    fly:{n:'Flypass',s:'FLY'}, app:{n:'Parqueoo convenios App',s:'APP'}, caj:{n:'Parqueoo Autogestión cajeros',s:'CAJ'},
+    nd:{n:'Sin área asignada',s:'N/D'} // categoría «-» del informe de tickets abiertos
   },
   // «Tickets por áreas 2026» — octubre completo: [ingresados, cerrados]
   areaOct:{sis:[262,248],sn2:[2,0],bog:[96,88],com:[28,25],med:[34,29],pfe:[16,14],idi:[9,7],esp:[28,20],fly:[1,1],lab:[3,1],gar:[2,0],fab:[0,0],app:[0,0],caj:[1,0],cpr:[3,1],sp1:[8,0],sp2:[8,3]},
-  // «Descripción por área» — noviembre al 18: [ingresados, cerrados, prom. ingresados/día, prom. atención días]
-  areaNov:{sis:[160,145,9,0.9],bog:[36,26,2,1.4],esp:[19,12,2,3.2],med:[13,7,2,1.7],pfe:[11,7,2,1.7],com:[10,9,1,5.2],idi:[10,3,1,2.3],sn2:[9,2,1,5.5],sp2:[5,1,1,7.0],cpr:[3,1,1,6.0],lab:[1,0,1,0.0],caj:[1,1,1,6.0],sp1:[0,0,0,0.0],fly:[0,0,0,0.0],gar:[0,0,0,0.0],app:[0,0,0,0.0]},
-  // «Tickets abiertos por área» — página congelada en el corte del ${CORTE_DM} en el export del 18: [total, de ellos creados en 2025]
-  abiertosArea:{sis:[30,0],sp1:[14,0],esp:[12,0],bog:[11,1],med:[11,0],sp2:[7,0],pfe:[7,0],sn2:[5,0],cpr:[5,1],idi:[5,0],gar:[3,0],lab:[2,0],caj:[1,0]},
-  abiertosKpi:{total:113,clientes:46,antiguedadDias:35,mas7dias:69,antiguedadHoras:837.6},
-  abiertosFinMes:[94,84,93,88,88,87,85,107,109,98,113],
-  antiguedad:[['ago 2025',1],['oct 2025',1],['feb 2026',1],['mar 2026',1],['jun 2026',1],['jul 2026',1],['ago 2026',8],['sep 2026',11],['oct 2026',42],['nov 2026',46]],
+  // «Descripción por área» — noviembre al corte: [ingresados, cerrados, prom. ingresados/día, prom. atención días]
+  areaNov:{sis:[219,201,9,1.1],bog:[53,44,3,1.7],esp:[27,17,2,3.7],med:[16,12,1,2.8],com:[15,11,2,4.7],idi:[15,7,1,2.9],pfe:[15,14,2,3.6],sn2:[12,1,1,5.0],sp2:[7,4,1,8.0],cpr:[5,1,1,6.0],fly:[1,1,1,5.0],lab:[1,0,1,0.0],caj:[1,1,1,6.0],sp1:[0,0,0,0.0],gar:[0,0,0,0.0],app:[0,0,0,0.0]},
+  // «Tickets abiertos por área» — al corte: [total, de ellos creados en 2025].
+  // 'nd' es la categoría sin nombre de área («-») del propio informe.
+  abiertosArea:{sis:[37,0],bog:[17,1],esp:[13,0],sp1:[12,0],idi:[10,0],sn2:[8,0],med:[4,0],sp2:[4,0],pfe:[4,0],cpr:[3,1],gar:[3,0],lab:[1,0],nd:[1,0]},
+  abiertosKpi:{total:117,clientes:44,antiguedadDias:36,mas7dias:78,antiguedadHoras:860.0},
+  abiertosFinMes:[94,84,93,88,88,87,85,107,109,98,116],
+  antiguedad:[['ago 2025',1],['oct 2025',1],['feb 2026',1],['jun 2026',1],['jul 2026',2],['ago 2026',5],['sep 2026',8],['oct 2026',22],['nov 2026',76]],
   abiertosCliente:[ // [año, mes de creación, cliente, tickets, % del mes, antigüedad días, antigüedad horas] — filas visibles en el informe
-    [2026,'octubre','Worktech Center 1 (Grupo Asd) (Bancolombia) (PASILLOS)',1,'2 %',25,600.0],
-    [2026,'agosto','Universitaria Agustiniana - Uniagustiniana (70)',1,'13 %',77,1848.0],
-    [2026,'septiembre','Universitaria Agustiniana - Uniagustiniana (70)',1,'9 %',67,1608.0],
-    [2026,'octubre','Universitaria Agustiniana - Uniagustiniana (70)',1,'2 %',26,624.0],
-    [2026,'noviembre','Universitaria Agustiniana - Uniagustiniana (70)',1,'2 %',7,168.0],
-    [2026,'agosto','Universidad EIA (35)',1,'13 %',71,1704.0],
-    [2026,'noviembre','Universidad EIA (35)',1,'2 %',1,24.0],
-    [2026,'agosto','Universidad EAFIT (63)',1,'13 %',82,1968.0],
-    [2026,'septiembre','Universidad EAFIT (63)',2,'18 %',51,1212.0],
-    [2026,'octubre','Universidad EAFIT (63)',4,'10 %',17,414.0],
-    [2026,'noviembre','Universidad EAFIT (63)',2,'4 %',4,84.0],
-    [2026,'octubre','Universidad…',1,'2 %',12,288.0]
+    [2026,'noviembre','C.C. Titán Plaza (49)',9,'12 %',11,261.3],
+    [2026,'noviembre','C.C. Parque Caracolí (68)',8,'11 %',13,303.0],
+    [2026,'noviembre','Universidad EAFIT (63)',7,'9 %',7,171.4],
+    [2026,'octubre','Universidad EAFIT (63)',4,'18 %',32,774.0],
+    [2026,'noviembre','Universidad de La Sabana (15)',4,'5 %',7,156.0],
+    [2026,'octubre','C.C. Parque Caracolí (68)',3,'14 %',36,856.0],
+    [2026,'octubre','Hospital San Vicente Rionegro',3,'14 %',32,776.0],
+    [2026,'noviembre','Aeropuerto Internacional El Dorado (29)',3,'4 %',6,144.0],
+    [2026,'noviembre','Airplan - Aeropuerto Internacional JMC (20)',3,'4 %',10,240.0],
+    [2026,'noviembre','Centro Médico de la Sabana (69)',3,'4 %',11,264.0],
+    [2026,'noviembre','GMC - Salud y Servicios (36)',3,'4 %',1,24.0],
+    [2026,'octubre','Corferias - Ágora (8)',2,'9 %',49,1176.0],
+    [2026,'noviembre','Airplan - Aeropuerto EOH…',2,'3 %',17,408.0]
   ],
   sla:{ // «Informe tiempos de servicio» (horas)
-    promedio:78.6, cumplePct:47.1, cumple:1814, fuera:2035, cerrados:3849, promFuera:145.4, promATiempo:3.6,
-    general:[139.5,102.3,118.0,98.6,70.0,90.0,64.6,67.4,65.7,34.4,17.0],
-    aTiempo:[5.3,3.3,4.2,3.5,4.3,4.3,4.3,3.0,3.3,3.1,2.5],
-    fueraT:[217.9,192.1,204.8,162.9,121.4,151.5,110.4,138.7,132.5,73.2,39.5],
-    nuevosATiempo:[16.5,10.9,12.2,11.3,12.0,14.4,11.3,7.9,9.3,8.3,7.9],
-    nuevosFuera:[127.7,112.2,124.5,120.3,122.9,135.0,145.3,142.1,118.9,105.1,79.7],
-    prioridad:[['Nivel PLATA',2760,1555,1205,52.4,56.3],['Nivel ORO',1019,236,783,151.1,23.2],['Nivel DIAMANTE',70,23,47,58.5,32.9]],
-    // el informe muestra dos filas «Escalado a Spar…» sin el número completo
-    area:[['fly',731.8,14.1],['sn2',359.6,null],['spx',321.1,7.9],['gar',235.3,null],['spy',213.0,10.3],['lab',168.1,0.5],['app',161.6,5.5],['idi',159.1,6.9],['cpr',153.6,null],['com',92.1,6.2],['med',84.8,6.8],['pfe',80.8,4.4],['bog',79.8,6.6],['sis',66.3,3.1]]
+    promedio:78.2, cumplePct:47.2, cumple:1866, fuera:2087, cerrados:3953, promFuera:144.8, promATiempo:3.6,
+    general:[139.3,102.4,118.9,100.1,70.0,90.1,65.1,67.8,68.2,36.5,21.0],
+    aTiempo:[5.4,3.3,4.2,3.5,4.3,4.3,4.3,3.0,3.3,3.1,2.4],
+    fueraT:[218.6,192.1,206.3,165.5,121.4,151.6,111.3,139.6,137.8,77.0,46.2],
+    nuevosATiempo:[16.7,10.9,12.2,11.3,12.0,14.4,11.3,7.9,9.3,8.3,7.9],
+    nuevosFuera:[128.5,112.2,124.5,120.3,122.9,135.0,145.3,142.1,119.4,105.4,97.4],
+    prioridad:[['Nivel PLATA',2839,1606,1233,51.7,56.6],['Nivel ORO',1023,231,792,152.1,22.6],['Nivel DIAMANTE',91,29,62,73.4,31.9]],
+    // el informe muestra dos filas «Escalado a Spar…» sin el número completo;
+    // 'Área sistemas nivel 1' queda fuera del área visible del gráfico en este export
+    area:[['fly',731.8,14.1],['fab',393.4,3.7],['sn2',277.3,null],['gar',235.3,null],['spx',201.2,12.2],['spy',196.3,10.3],['app',161.6,5.5],['lab',159.6,0.5],['cpr',153.6,null],['idi',146.6,6.9],['com',94.6,6.2],['med',86.7,6.8],['pfe',80.8,4.4],['bog',78.7,6.6]]
   },
-  ansOct:{ // «Cumplimiento ANS por técnico» — noviembre (al 18)
-    cerradosMes:214, cerradosTecnicos:211, cumple:129, pctMes:61.14, pctTotal:54.15,
-    ingenieros:[['Nicolás Benítez H.',64.15],['Soporte Incomelec',60.90]],
-    areaCierre:[['sis',121],['bog',6],['otr',2]] // 'otr': porciones pequeñas sin etiqueta en el gráfico del informe
+  ansOct:{ // «Cumplimiento ANS por técnico» — noviembre al corte
+    cerradosMes:314, cerradosTecnicos:311, cumple:180, pctMes:57.88, pctTotal:54.10,
+    ingenieros:[['Nicolás Benítez H.',60.26],['Soporte Incomelec',57.33]],
+    areaCierre:[['sis',166],['bog',10],['otr',4]] // 'otr': porciones pequeñas sin etiqueta en el gráfico del informe
   },
   reabiertos:{ // «Informe general tickets reabiertos»
-    cerradosAnio:3849, cerradosSitio:30, total:4, pct:13.3, promedio:1,
-    tecnicos:[['Mauricio Caballero - Soporte Hardware',5,1,20.0],['Natalia Rojas-Soporte Hardware',3,1,33.3],['Jesús Díaz-Biomig/Veripax Cartagena',1,1,100.0],['Jhon Béltran - Soporte Parking Dorado',1,1,100.0]],
-    tickets:[['Aeropuerto Rafael Núñez (Cartagena)',1,'Jesús Díaz-Biomig/Veripax Cartagena',34858],['C.C. Titán Plaza (49)',1,'Jhon Béltran - Soporte Parking Dorado',34927],['C.C. Titán Plaza (49)',1,'Mauricio Caballero - Soporte Hardware',34909],['Parqueadero Plaza Claro (11)',1,'Natalia Rojas-Soporte Hardware',34544]]
+    cerradosAnio:3953, cerradosSitio:47, total:5, pct:10.6, promedio:1,
+    tecnicos:[['Mauricio Caballero - Soporte Hardware',6,1,16.7],['Natalia Rojas-Soporte Hardware',4,1,25.0],['Sebastián Navarrete - Soporte Hardware',4,1,25.0],['Jesús Díaz-Biomig/Veripax Cartagena',1,1,100.0],['Jhon Béltran - Soporte Parking Dorado',1,1,100.0]],
+    tickets:[['Aeropuerto Rafael Núñez (Cartagena)',1,'Jesús Díaz-Biomig/Veripax Cartagena',34858],['C.C. Titán Plaza (49)',1,'Jhon Béltran - Soporte Parking Dorado',34927],['C.C. Titán Plaza (49)',1,'Mauricio Caballero - Soporte Hardware',34909],['Connecta 26 (28)',1,'Sebastián Navarrete - Soporte Hardware',34971],['Parqueadero Plaza Claro (11)',1,'Natalia Rojas-Soporte Hardware',34544]]
   },
-  clientes:[ // «Clientes con más ingreso y cierre» + «Movimientos entradas clientes» — noviembre al 18
-    {k:'ind',n:'Aeropuerto Internac… (Indigo-Aeropuerto)',ini:'AI',ing:25,cer:22,ent:77000,match:['Indigo','Aeropuerto Internac']},
+  clientes:[ // «Clientes con más ingreso y cierre» + «Movimientos entradas clientes» — noviembre al corte
+    {k:'ind',n:'Indigo-Aeropuerto el…',ini:'AI',ing:28,cer:26,ent:150000,match:['Indigo','Aeropuerto Internac']},
+    {k:'tit',n:'C.C. Titán Plaza (49)',ini:'TP',ing:21,cer:12,ent:76706,match:['Titán Plaza']},
     {k:'city',n:'Consorcio Citymovil…',ini:'CC',ing:21,cer:21,ent:0,match:['Citymovil']},
-    {k:'tit',n:'C.C. Titán Plaza (49)',ini:'TP',ing:17,cer:8,ent:65381,match:['Titán Plaza']},
-    {k:'ppc',n:'Parqueadero Plaza C… (CC Plaza Claro)',ini:'PP',ing:15,cer:15,ent:63613,match:['Plaza Claro']},
-    {k:'may',n:'C.C. Mayorca 2 (51)',ini:'M2',ing:13,cer:12,ent:54266,match:['Mayorca']},
-    {k:'eaf',n:'Universidad EAFIT (63)',ini:'UE',ing:12,cer:9,ent:20500,match:['EAFIT']},
-    {k:'pca',n:'C.C. Parque Caracolí (68)',ini:'PC',ing:9,cer:2,ent:23000,match:['Parque Caracolí']},
-    {k:'cdr',n:'Ciudad del Rio (38) (GMC-Ciudad del Rio)',ini:'CR',ing:9,cer:8,ent:8383,match:['Ciudad del Rio']},
-    {k:'sfp',n:'San Fernando Plaza (…',ini:'SF',ing:9,cer:8,ent:28000,match:['San Fernando']},
-    {k:'sab',n:'Universidad de La Sa… (Universidad de la Sabana)',ini:'US',ing:9,cer:4,ent:41370,match:['Sabana','La Sa']}
+    {k:'eaf',n:'Universidad EAFIT (…',ini:'UE',ing:17,cer:10,ent:72000,match:['EAFIT']},
+    {k:'ppc',n:'Parqueadero Plaza C… (CC Plaza Claro)',ini:'PP',ing:16,cer:15,ent:92304,match:['Plaza Claro']},
+    {k:'cdr',n:'Ciudad del Rio (38) (GMC-Ciudad del Rio)',ini:'CR',ing:15,cer:14,ent:26499,match:['Ciudad del Rio']},
+    {k:'may',n:'C.C. Mayorca 2 (51)',ini:'M2',ing:14,cer:14,ent:119994,match:['Mayorca']},
+    {k:'pca',n:'C.C. Parque Caracolí …',ini:'PC',ing:14,cer:6,ent:27000,match:['Parque Caracolí','Parque Caracoli']},
+    {k:'sfp',n:'San Fernando Plaza (…',ini:'SF',ing:14,cer:12,ent:43088,match:['San Fernando']},
+    {k:'niz',n:'C.C. Bulevar Niza (71)',ini:'BN',ing:13,cer:11,ent:0,match:['Bulevar Niza']}
   ],
   informes:{esperados:22,ejecutados:22,faltantes:0,pct:100.0, // noviembre
     filas:[['Diamante',11,11,0,0,11,100.0,100.00],['Oro',11,11,0,0,11,100.0,100.00]]},
